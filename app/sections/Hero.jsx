@@ -29,7 +29,7 @@ const Hero = () => {
       <div className="w-full h-auto custom:w-1/2 flex flex-col justify-center items-center custom:items-start p-10 space-y-6">
         <h1 className="text-4xl custom:text-5xl font-bold leading-tight tracking-wide">
           2024 Trading Chart Patterns
-          <span className="text-primary">Ebook</span>
+          <span className="text-primary"> Ebook</span>
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground">
           Unlock the Secrets to Smart, Profitable Trading with Our Expert Guide
