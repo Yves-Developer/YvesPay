@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { CheckCheck, ShieldCheck, Star } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const ebookFeatures = [
   {
@@ -49,8 +50,8 @@ const Hero = () => {
           ))}
         </ol>
 
-        <Button className="mt-6 px-8 py-7 text-lg">
-          Get Instant Access & Trade Smarter
+        <Button className="mt-6 px-8 py-7 text-lg" asChild>
+          <Link href="/Product">Get Instant Access & Trade Smarter</Link>
         </Button>
         <div className="flex">
           <Star className="text-yellow-400 text-sm" />

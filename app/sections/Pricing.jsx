@@ -8,6 +8,7 @@ import {
   CardDescription,
 } from "@/components/ui/card"; // ShadCN imports
 import { CheckCheck } from "lucide-react";
+import Link from "next/link";
 
 const ebookFeatures = [
   {
@@ -67,7 +68,7 @@ const Pricing = () => {
           <CardFooter>
             {/* Call to Action Button */}
             <button className="px-8 py-4 bg-primary text-white rounded-md text-lg mt-4 w-full">
-              Buy Now and Start Trading Smarter
+              <Link href="/Product">Buy Now and Start Trading Smarter</Link>
             </button>
           </CardFooter>
         </Card>
