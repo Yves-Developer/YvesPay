@@ -13,7 +13,6 @@ import Link from "next/link";
 import Header from "@/components/ui/Header";
 import { getData } from "../lib/FetchData";
 import { urlFor } from "../lib/sanity";
-export const dynamic = "force-dyanmic";
 const Product = async () => {
   const product = {
     reviews: 4.6,
