@@ -7,6 +7,7 @@ import Reviews from "./sections/Reviews";
 import Pricing from "./sections/Pricing";
 import Faq from "./sections/Faq";
 import { getData } from "./lib/FetchData";
+export const dynamic = "force-dyanmic";
 const Home = async () => {
   const data = await getData();
 
