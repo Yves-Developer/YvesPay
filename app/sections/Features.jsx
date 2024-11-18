@@ -33,7 +33,7 @@ const features = [
 
 const Features = () => {
   return (
-    <div className="mt-20 px-4 w-full">
+    <div className="mt-20 px-4 w-full pb-20">
       {/* Responsive grid layout */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center">
         {features.map((data) => (

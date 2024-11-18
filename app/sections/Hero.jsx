@@ -1,36 +1,48 @@
 /** @format */
 
 import { Button } from "@/components/ui/button";
+// import { urlFor } from "../lib/FetchData";
+import { getData } from "../lib/FetchData";
+import { urlFor } from "../lib/sanity"; // Correct import for urlFor
 import { CheckCheck, ShieldCheck, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 const ebookFeatures = [
   {
-    icon: "✨",
     title: "Unlock Proven Strategies to Maximize Your Trading Profits",
   },
   {
-    icon: "📚",
     title: "Expert Strategies for Identifying Profitable Trades",
   },
   {
-    icon: "🌟",
     title: "Learn to Read the Markets Like a Pro",
   },
   {
-    icon: "💡",
     title: "Perfect for Both Beginners and Experienced Traders",
   },
 ];
 
-const Hero = () => {
+const Hero = async () => {
+  const data = await getData(); // Fetch data using the getData function
+
+  if (!data.name) {
+    return <div>No product name available.</div>; // Show error message if 'name' is missing
+  }
+
+  // Safely generate the image URL (handle the case when there might be no image)
+  const imageUrl =
+    data.image && data.image[0]?.asset?._ref
+      ? urlFor(data.image[0]).width(414).height(736).url()
+      : "/lastbook.jpg"; // Use a fallback image if no image is available
+
   return (
     <div className="relative h-auto flex flex-col-reverse custom:flex-row custom:py-10 custom:space-x-8 space-y-8 custom:space-y-0">
       <div className="w-full h-auto custom:w-1/2 flex flex-col justify-center items-center custom:items-start p-10 space-y-6">
         <h1 className="text-4xl custom:text-5xl font-bold leading-tight tracking-wide">
-          2024 Trading Chart Patterns
-          <span className="text-primary"> Ebook</span>
+          {data.name}
+          <span className="text-primary"> {data.keyword}</span>{" "}
+          {/* Dynamic content */}
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground">
           Unlock the Secrets to Smart, Profitable Trading with Our Expert Guide
@@ -53,6 +65,7 @@ const Hero = () => {
         <Button className="mt-6 px-8 py-7 text-lg" asChild>
           <Link href="/Product">Get Instant Access & Trade Smarter</Link>
         </Button>
+
         <div className="flex">
           <Star className="text-yellow-400 text-sm" />
           <Star className="text-yellow-400 text-sm" />
@@ -72,13 +85,14 @@ const Hero = () => {
             Get the strategies you need to succeed.
           </p>
         </div>
+
         <div className="hidden least:block absolute z-10 bg-white p-6 rounded-lg shadow-md transform translate-y-[305px] translate-x-[10px] md:-translate-y-[160px] md:translate-x-[205px]">
           <ShieldCheck className="text-green-600 font-bold" />
         </div>
 
-        {/* Image with a hover effect */}
+        {/* Image with hover effect */}
         <Image
-          src="/lastbook.jpg"
+          src={imageUrl} // Use dynamically generated image URL
           width={414}
           height={736}
           alt="Trading Ebook"

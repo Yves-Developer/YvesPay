@@ -1,6 +1,7 @@
 /** @format */
 
 "use client";
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -123,7 +124,7 @@ const Payment = () => {
 
               {/* Tax */}
               <div className="flex justify-between text-lg">
-                <span>Tax (8%)</span>
+                <span>Tax</span>
                 <span>${totals.tax.toFixed(2)}</span>
               </div>
 
