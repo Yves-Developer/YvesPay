@@ -174,7 +174,7 @@ const Payment = () => {
 
         {/* Right Section - Payment Options */}
         <div className="space-y-6">
-          <Card className="p-6 bg-white shadow-md rounded-lg">
+          <Card className="p-0 w-full sm:p-6 bg-white shadow-md rounded-lg">
             <h2 className="text-xl font-bold">Payment Method</h2>
 
             {/* Paddle Checkout Integration */}
