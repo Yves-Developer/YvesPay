@@ -6,9 +6,32 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ShoppingCart } from "lucide-react"; // Icons for payment options
+import { getData } from "../lib/FetchData";
+import Loading from "@/components/ui/Loading";
 
 const Payment = () => {
-  // State to store product details and loading state for Paddle
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [checkoutInitialized, setCheckoutInitialized] = useState(false); // Track if checkout is initialized
+
+  // Fetch data on component mount using useEffect
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await getData(); // Fetch data (e.g., from Sanity)
+        setData(result); // Set data once fetched
+      } catch (err) {
+        setError(err.message); // Handle errors
+      } finally {
+        setLoading(false); // End loading once data is fetched
+      }
+    };
+
+    fetchData(); // Call the function to fetch data
+  }, []); // Only run this once when component mounts
+
+  // State to store product details and totals for Paddle
   const [product, setProduct] = useState({
     name: "",
     price: 0,
@@ -19,45 +42,53 @@ const Payment = () => {
     tax: 0,
     total: 0,
   });
-  const [loading, setLoading] = useState(true);
 
-  // Sample items list for Paddle (replace with actual data if needed)
-  const monthItemsList = [
-    { priceId: "pri_01jcv0ykrfafvz6mp6m5bhedw7", quantity: 1 },
-  ];
+  // Dynamically create the priceData once data is available
+  const priceData = data
+    ? [
+        {
+          priceId: data.priceId, // Use priceId from the fetched data
+          quantity: 1,
+        },
+      ]
+    : [];
 
-  // Load Paddle script dynamically on mount
+  // Load Paddle script dynamically once the data is available
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://cdn.paddle.com/paddle/v2/paddle.js";
-    script.async = true;
+    if (data && !checkoutInitialized) {
+      // Ensure the script is loaded once
+      const script = document.createElement("script");
+      script.src = "https://cdn.paddle.com/paddle/v2/paddle.js";
+      script.async = true;
 
-    script.onload = () => {
-      if (window.Paddle) {
-        window.Paddle.Environment.set("sandbox"); // Set to "live" for production
-        window.Paddle.Initialize({
-          token: "test_159cde5d551ea937bae3bb7c49a", // Replace with your actual token
-          eventCallback: updateTable, // Event callback function to update the table
-        });
+      script.onload = () => {
+        if (window.Paddle) {
+          window.Paddle.Environment.set("sandbox"); // Use "live" for production
+          window.Paddle.Initialize({
+            token: "test_159cde5d551ea937bae3bb7c49a", // Replace with your actual token
+            eventCallback: sendData, // Event callback function
+          });
 
-        // Open the checkout with predefined items
-        openCheckout(monthItemsList); // Using your monthItemsList
-      }
-    };
+          // Open the checkout with predefined items only once
+          openCheckout(priceData);
+          setCheckoutInitialized(true); // Set checkoutInitialized to true
+        }
+      };
 
-    script.onerror = () => {
-      console.error("Failed to load Paddle SDK script.");
-    };
+      script.onerror = () => {
+        console.error("Failed to load Paddle SDK script.");
+      };
 
-    document.head.appendChild(script);
+      document.head.appendChild(script);
 
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, []);
+      return () => {
+        document.head.removeChild(script); // Cleanup the script on unmount
+      };
+    }
+  }, [data, checkoutInitialized]); // Run only when `data` is available and checkout is not initialized
 
   // Event callback function to update product details and totals from Paddle
-  const updateTable = (event) => {
+  const sendData = (event) => {
     if (!event.name) return;
 
     let items = event.data.items;
@@ -88,15 +119,19 @@ const Payment = () => {
       window.Paddle.Checkout.open({
         settings: {
           displayMode: "inline", // Use inline checkout
-          frameTarget: "checkout-container", // Target div to embed the checkout iframe
+          frameTarget: "checkout-container", // Target div for iframe
           frameInitialHeight: "450", // Set initial height for iframe
           frameStyle:
             "width: 100%; min-width: 312px; background-color: transparent; border: none;", // Styling
         },
-        items: items, // Pass the items list here
+        items: items, // Pass the items list
       });
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <section className="bg-[#f5f5fc] py-12">

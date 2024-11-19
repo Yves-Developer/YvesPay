@@ -102,5 +102,4 @@ const Hero = async () => {
     </div>
   );
 };
-
 export default Hero;

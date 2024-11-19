@@ -1,5 +1,4 @@
 /** @format */
-"use client";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -105,5 +104,5 @@ const Product = async () => {
     </section>
   );
 };
-
+export const revaliadate = 10;
 export default Product;
