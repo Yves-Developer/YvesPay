@@ -16,7 +16,7 @@ export default {
     {
       name: 'amount',
       title: 'Amount',
-      type: 'string',
+      type: 'number',
     },
     {
       name: 'currency',
@@ -32,18 +32,6 @@ export default {
       name: 'productName',
       title: 'Product Name',
       type: 'string',
-    },
-    {
-      name: 'transactionDetails',
-      title: 'Transaction Details',
-      type: 'string',
-      fields: [
-        {
-          name: 'rawData',
-          title: 'Raw Data',
-          type: 'text',
-        },
-      ],
     },
   ],
 }

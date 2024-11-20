@@ -47,7 +47,7 @@ async function handleTransactionPaid(data) {
       _type: "transaction",
       transactionId: transactionData.id,
       userEmail: transactionData.customer_id, // You can use customer email from here
-      amount: balance,
+      amount: Number(balance),
       currency: transactionData.details.currency_code,
       status: transactionData.status, // status = 'paid'
       productName: transactionData.items[0].price.name,
