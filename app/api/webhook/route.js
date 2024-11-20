@@ -1,16 +1,15 @@
 /** @format */
 
-// app/api/paddle/route.js
 import { validateSignature } from "@/utils/paddle";
+import { client } from "@/lib/sanity"; // Import your sanity client
 
-// Retrieve your Paddle webhook secret from environment variables
 const paddleWebhookSecret = process.env.PADDLE_WEBHOOK_SECRET;
 
 export async function POST(req) {
   const signature = req.headers.get("Paddle-Signature");
   const body = await req.text();
 
-  // Validate the signature
+  // Validate the signature to ensure it's coming from Paddle
   const isValid = await validateSignature(signature, body, paddleWebhookSecret);
 
   if (!isValid) {
@@ -20,27 +19,14 @@ export async function POST(req) {
     );
   }
 
-  // Parse the body
   const parsedBody = JSON.parse(body);
 
-  // Handle different events
   switch (parsedBody.event_type) {
     case "transaction.paid":
-      // Handle transaction paid event
+      // Handle transaction paid event and save data to Sanity
       await handleTransactionPaid(parsedBody);
       break;
-    case "transaction.created":
-      // Handle transaction created event
-      break;
-    case "subscription.created":
-      // Handle subscription created event
-      break;
-    case "subscription.updated":
-      // Handle subscription updated event
-      break;
-    case "subscription.cancelled":
-      // Handle subscription cancelled event
-      break;
+    // Other event types can be handled here
     default:
       break;
   }
@@ -48,19 +34,25 @@ export async function POST(req) {
   return new Response(JSON.stringify({ message: "done" }), { status: 200 });
 }
 
-// Function to handle transaction.paid event
+// Function to handle the "transaction.paid" event and save data to Sanity
 async function handleTransactionPaid(data) {
-  console.log("Transaction paid:", data);
+  try {
+    const transactionData = data.data;
 
-  // Extract necessary data (you can extract more as needed)
-  const transactionId = data.data.id;
-  const userEmail = data.data.email;
+    // Save transaction data to Sanity
+    await client.create({
+      _type: "transaction",
+      transactionId: transactionData.id,
+      userEmail: transactionData.customer_id, // You can use customer email from here
+      amount: transactionData.details.adjusted_totals.grand_total,
+      currency: transactionData.details.currency_code,
+      status: transactionData.status, // status = 'paid'
+      productName: transactionData.items[0].price.name,
+      transactionDetails: JSON.stringify(transactionData), // Store raw data if needed
+    });
 
-  // Build the redirect URL for the download page
-  const downloadPageUrl = `/download?transactionId=${transactionId}&email=${encodeURIComponent(userEmail)}`;
-
-  // Send the user to the download page
-  // You may replace `window.location.href` or similar in client-side code if this logic is applied client-side
-  // For server-side response in Next.js, we can send a redirect response:
-  // return Response.redirect(downloadPageUrl, 302);
+    console.log("Transaction data saved to Sanity.");
+  } catch (error) {
+    console.error("Error saving transaction data to Sanity:", error);
+  }
 }
