@@ -16,7 +16,7 @@ export default {
     {
       name: 'amount',
       title: 'Amount',
-      type: 'number',
+      type: 'string',
     },
     {
       name: 'currency',
