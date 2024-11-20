@@ -1,7 +1,8 @@
 /** @format */
 
+import { client } from "@/app/lib/sanity";
 import { validateSignature } from "@/utils/paddle";
-import { client } from "@/lib/sanity"; // Import your sanity client
+// Import your sanity client
 
 const paddleWebhookSecret = process.env.PADDLE_WEBHOOK_SECRET;
 
