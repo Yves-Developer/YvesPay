@@ -39,13 +39,15 @@ export async function POST(req) {
 async function handleTransactionPaid(data) {
   try {
     const transactionData = data.data;
-
+    const balance = (
+      Number(transactionData.details.adjusted_totals.grand_total) / 100
+    ).toFixed(2);
     // Save transaction data to Sanity
     await client.create({
       _type: "transaction",
       transactionId: transactionData.id,
       userEmail: transactionData.customer_id, // You can use customer email from here
-      amount: transactionData.details.adjusted_totals.grand_total,
+      amount: balance,
       currency: transactionData.details.currency_code,
       status: transactionData.status, // status = 'paid'
       productName: transactionData.items[0].price.name,

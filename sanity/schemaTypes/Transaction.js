@@ -36,7 +36,7 @@ export default {
     {
       name: 'transactionDetails',
       title: 'Transaction Details',
-      type: 'object',
+      type: 'string',
       fields: [
         {
           name: 'rawData',

@@ -6,7 +6,7 @@ import React, { useState, useEffect } from "react";
 const Download = () => {
   const [hasPaid, setHasPaid] = useState(false);
   const [loading, setLoading] = useState(true);
-  const userEmail = "user@example.com"; // You can fetch this from session, cookie, etc.
+  const userEmail = "ctm_01jd59ka8c0yp63svzez7fayf4"; // You can fetch this from session, cookie, etc.
 
   useEffect(() => {
     // Call the API to check the payment status
