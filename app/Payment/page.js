@@ -3,17 +3,17 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation"; // Ensure proper import for useRouter in Next.js 13+
 import { Card } from "@/components/ui/card";
-import { ShoppingCart } from "lucide-react"; // Icons for payment options
-import { getData } from "../lib/FetchData";
 import Loading from "@/components/ui/Loading";
+import { getData } from "../lib/FetchData";
 
 const Payment = () => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [checkoutInitialized, setCheckoutInitialized] = useState(false); // Track if checkout is initialized
+  const [checkoutInitialized, setCheckoutInitialized] = useState(false);
+  const router = useRouter(); // useRouter for redirect after successful payment
 
   // Fetch data on component mount using useEffect
   useEffect(() => {
@@ -29,7 +29,7 @@ const Payment = () => {
     };
 
     fetchData(); // Call the function to fetch data
-  }, []); // Only run this once when component mounts
+  }, []);
 
   // State to store product details and totals for Paddle
   const [product, setProduct] = useState({
@@ -56,7 +56,6 @@ const Payment = () => {
   // Load Paddle script dynamically once the data is available
   useEffect(() => {
     if (data && !checkoutInitialized) {
-      // Ensure the script is loaded once
       const script = document.createElement("script");
       script.src = "https://cdn.paddle.com/paddle/v2/paddle.js";
       script.async = true;
@@ -85,7 +84,7 @@ const Payment = () => {
         document.head.removeChild(script); // Cleanup the script on unmount
       };
     }
-  }, [data, checkoutInitialized]); // Run only when `data` is available and checkout is not initialized
+  }, [data, checkoutInitialized]);
 
   // Event callback function to update product details and totals from Paddle
   const sendData = (event) => {
@@ -111,6 +110,17 @@ const Payment = () => {
 
       setLoading(false); // Stop loading once product details and totals are available
     }
+
+    // Redirect to the success page when payment is successful
+    if (event.name === "checkout.payment.success") {
+      const transactionId = event.data.transaction_id;
+      const userEmail = event.data.email;
+
+      // Redirect to the download page or a success page
+      router.push(
+        `/download?transactionId=${transactionId}&email=${userEmail}`
+      );
+    }
   };
 
   // Function to open the Paddle checkout
@@ -124,7 +134,6 @@ const Payment = () => {
           frameStyle:
             "width: 100%; min-width: 312px; background-color: transparent; border: none;", // Styling
         },
-        successCallback: `${window.location.origin}/api/webhook`,
         items: items, // Pass the items list
       });
     }
