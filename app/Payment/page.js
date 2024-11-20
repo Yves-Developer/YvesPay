@@ -124,6 +124,7 @@ const Payment = () => {
           frameStyle:
             "width: 100%; min-width: 312px; background-color: transparent; border: none;", // Styling
         },
+        successCallback: `${window.location.origin}/api/webhook`,
         items: items, // Pass the items list
       });
     }
