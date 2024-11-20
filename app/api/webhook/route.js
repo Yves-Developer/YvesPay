@@ -1,8 +1,7 @@
 /** @format */
 
 // Retrieve your Paddle webhook secret from environment variables
-const paddleWebhookSecret =
-  "pdl_ntfset_01jd4rznp76krkkdw97j6ewra4_u4bFrrcFE/HftI7TDUBD1AuqOMAS7KNX";
+const paddleWebhookSecret = process.env.PADDLE_WEBHOOK_SECRET;
 // app/api/paddle/route.js
 import { validateSignature } from "@/utils/paddle";
 

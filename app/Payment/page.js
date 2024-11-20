@@ -65,7 +65,7 @@ const Payment = () => {
         if (window.Paddle) {
           window.Paddle.Environment.set("sandbox"); // Use "live" for production
           window.Paddle.Initialize({
-            token: "test_159cde5d551ea937bae3bb7c49a", // Replace with your actual token
+            token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN, // Replace with your actual token
             eventCallback: sendData, // Event callback function
           });
 
