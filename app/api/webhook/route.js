@@ -62,5 +62,5 @@ async function handleTransactionPaid(data) {
   // Send the user to the download page
   // You may replace `window.location.href` or similar in client-side code if this logic is applied client-side
   // For server-side response in Next.js, we can send a redirect response:
-  return Response.redirect(downloadPageUrl, 302);
+  // return Response.redirect(downloadPageUrl, 302);
 }
