@@ -26,11 +26,11 @@ const Download = () => {
     return <Loading />;
   }
 
-  if (!hasPaid) {
-    return (
-      <p>You need to complete your payment before accessing the download.</p>
-    );
-  }
+  // if (!hasPaid) {
+  //   return (
+  //     <p>You need to complete your payment before accessing the download.</p>
+  //   );
+  // }
 
   return (
     <div className="min-h-screen flex justify-center items-center">
