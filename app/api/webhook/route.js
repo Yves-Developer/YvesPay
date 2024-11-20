@@ -6,6 +6,7 @@ import { validateSignature } from "@/utils/paddle"; // Utility to validate Paddl
 export async function POST(req) {
   const signature = req.headers.get("Paddle-Signature");
   const body = await req.text();
+  console.log("Received Webhook:", body);
 
   // Validate the Paddle webhook signature
   const isValid = await validateSignature(
