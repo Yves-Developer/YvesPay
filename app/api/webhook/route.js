@@ -1,49 +1,56 @@
 /** @format */
 
-import { NextResponse } from "next/server";
-import { buffer } from "micro";
-import * as crypto from "crypto";
-
 // Retrieve your Paddle webhook secret from environment variables
 const paddleWebhookSecret =
   "pdl_ntfset_01jd4rznp76krkkdw97j6ewra4_u4bFrrcFE/HftI7TDUBD1AuqOMAS7KNX";
-
-const verifyPaddleWebhook = (payload, signature) => {
-  const hmac = crypto.createHmac("sha256", paddleWebhookSecret);
-  hmac.update(payload);
-  const computedSignature = hmac.digest("hex");
-  return computedSignature === signature;
-};
+// app/api/paddle/route.js
+import { validateSignature } from "@/utils/paddle";
 
 export async function POST(req) {
-  try {
-    const signature = req.headers.get("paddle-signature");
-    const rawPayload = await buffer(req);
-    const payload = rawPayload.toString(); // Convert buffer to string for verification
+  const signature = req.headers.get("Paddle-Signature");
+  const body = await req.text();
 
-    // Verify the webhook signature
-    if (!verifyPaddleWebhook(payload, signature)) {
-      return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
-    }
+  // Validate the signature
+  const isValid = await validateSignature(signature, body, paddleWebhookSecret);
 
-    const data = JSON.parse(payload);
-
-    // Log webhook ID and event type for debugging
-    console.log("Received Webhook ID:", data.notification_id);
-    console.log("Event Type:", data.event_type);
-
-    // Handle the transaction.paid event
-    if (data.event_type === "transaction.paid") {
-      console.log("Transaction Paid:", data.data.id);
-      // Additional logic for handling a paid transaction
-    }
-
-    return NextResponse.json(
-      { message: "Webhook processed successfully" },
-      { status: 200 }
+  if (!isValid) {
+    return new Response(
+      JSON.stringify({ message: "Invalid webhook signature!" }),
+      { status: 401 }
     );
-  } catch (error) {
-    console.error("Error processing webhook:", error);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
+
+  // Parse the body
+  const parsedBody = JSON.parse(body);
+
+  // Handle different events
+  switch (parsedBody.event_type) {
+    case "transaction.paid":
+      // Handle transaction paid event
+      await handleTransactionPaid(parsedBody);
+      break;
+    case "transaction.created":
+      // Handle transaction created event
+      break;
+    case "subscription.created":
+      // Handle subscription created event
+      break;
+    case "subscription.updated":
+      // Handle subscription updated event
+      break;
+    case "subscription.cancelled":
+      // Handle subscription cancelled event
+      break;
+    default:
+      break;
+  }
+
+  return new Response(JSON.stringify({ message: "done" }), { status: 200 });
+}
+
+// Function to handle transaction.paid event
+async function handleTransactionPaid(data) {
+  console.log("Transaction paid:", data);
+  // Process payment (e.g., send the product or update the database)
+  // Example: Update customer status, deliver product, etc.
 }
