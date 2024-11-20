@@ -1,9 +1,10 @@
 /** @format */
 
-// Retrieve your Paddle webhook secret from environment variables
-const paddleWebhookSecret = process.env.PADDLE_WEBHOOK_SECRET;
 // app/api/paddle/route.js
 import { validateSignature } from "@/utils/paddle";
+
+// Retrieve your Paddle webhook secret from environment variables
+const paddleWebhookSecret = process.env.PADDLE_WEBHOOK_SECRET;
 
 export async function POST(req) {
   const signature = req.headers.get("Paddle-Signature");
@@ -50,6 +51,16 @@ export async function POST(req) {
 // Function to handle transaction.paid event
 async function handleTransactionPaid(data) {
   console.log("Transaction paid:", data);
-  // Process payment (e.g., send the product or update the database)
-  // Example: Update customer status, deliver product, etc.
+
+  // Extract necessary data (you can extract more as needed)
+  const transactionId = data.data.id;
+  const userEmail = data.data.email;
+
+  // Build the redirect URL for the download page
+  const downloadPageUrl = `/download?transactionId=${transactionId}&email=${encodeURIComponent(userEmail)}`;
+
+  // Send the user to the download page
+  // You may replace `window.location.href` or similar in client-side code if this logic is applied client-side
+  // For server-side response in Next.js, we can send a redirect response:
+  return Response.redirect(downloadPageUrl, 302);
 }
