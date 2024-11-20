@@ -12,7 +12,7 @@ const Payment = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [checkoutInitialized, setCheckoutInitialized] = useState(false);
-  const router = useRouter(); // useRouter for redirect after successful payment
+  // useRouter for redirect after successful payment
 
   // Fetch data on component mount using useEffect
   useEffect(() => {
