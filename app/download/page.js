@@ -1,42 +1,42 @@
 /** @format */
-"use client";
-import { useEffect, useState } from "react";
 
-export default function WelcomePage() {
-  const [transactionId, setTransactionId] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [downloadLink, setDownloadLink] = useState("");
+import React from "react";
+// Import the check icon from lucide-react
+import { CheckCircle } from "lucide-react";
 
-  useEffect(() => {
-    // Get the transactionId and email from the URL
-    const params = new URLSearchParams(window.location.search);
-    const transactionId = params.get("transactionId");
-    const email = params.get("email");
-
-    setTransactionId(transactionId);
-    setEmail(email);
-
-    // Here you can customize the download link based on the transactionId or email
-    if (transactionId) {
-      // Assume you have a function that generates a download link based on the transactionId
-      setDownloadLink(`/download/${transactionId}`);
-    }
-  }, []);
-
+const Download = () => {
   return (
-    <div>
-      <h1>Welcome!</h1>
-      <p>Thank you for your purchase, {email}!</p>
-      <p>Your payment has been successfully processed.</p>
+    <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-pink-100 to-gray-200">
+      <div className="relative p-6 md:p-12 max-w-lg bg-white rounded-xl shadow-xl overflow-hidden w-full">
+        {/* Decorative elements */}
+        <div className="absolute top-[-50px] right-[-50px] w-44 h-44 rounded-full bg-pink-200 opacity-30"></div>
+        <div className="absolute bottom-[-60px] left-[-60px] w-32 h-32 rounded-lg bg-blue-200 opacity-30"></div>
 
-      {downloadLink && (
-        <div>
-          <p>Click below to download your file:</p>
-          <a href={downloadLink} download>
-            Download Your File
+        <div className="text-center">
+          {/* Success Message */}
+          <h2 className="text-4xl font-semibold text-green-600 mb-4 flex justify-center items-center">
+            <CheckCircle className="mr-3 text-green-500" size={30} /> Payment
+            Successful!
+          </h2>
+          <p className="text-lg text-gray-700 mb-6">
+            Thank you for your purchase! Your ebook is ready to download. Click
+            the button below to get your copy.
+          </p>
+
+          {/* Download Button */}
+          <a
+            href="/path/to/your/ebook.pdf" // Replace with your ebook's URL
+            className="inline-block px-8 py-4 bg-primary text-white text-lg font-medium rounded-md shadow-lg transform transition-all hover:scale-105"
+          >
+            Download Your Ebook
           </a>
         </div>
-      )}
+
+        {/* Decorative Accents */}
+        <div className="absolute top-0 left-0 h-32 w-full bg-gradient-to-r from-pink-300 to-purple-400 opacity-50 rounded-t-xl"></div>
+      </div>
     </div>
   );
-}
+};
+
+export default Download;
