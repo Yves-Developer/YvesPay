@@ -123,7 +123,7 @@ const Payment = () => {
   console.log("successUrl: ", successUrl);
   // Function to open the Paddle checkout
   const openCheckout = (productData) => {
-    if (window.Paddle && successUrl) {
+    if (window.Paddle) {
       // Check if successUrl is available before passing to Paddle
       window.Paddle.Checkout.open({
         settings: {
