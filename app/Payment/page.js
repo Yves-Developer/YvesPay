@@ -124,22 +124,21 @@ const Payment = () => {
       const url = `${window.location.origin}/download?id=${transactionId}`;
       setSuccessUrl(url); // Dynamically set the successUrl after transactionId is set
       console.log("Constructed successUrl: ", url); // Log after setting the successUrl
-
-      // Now check if successUrl is available before passing to Paddle
-      if (window.Paddle) {
-        window.Paddle.Checkout.open({
-          settings: {
-            displayMode: "inline", // Use inline checkout
-            frameTarget: "checkout-container", // Target div for iframe
-            frameInitialHeight: "450", // Set initial height for iframe
-            frameStyle:
-              "width: 100%; min-width: 312px; background-color: transparent; border: none;", // Use dynamic transactionId for successUrl
-          },
-          items: priceData, // Pass the items list
-        });
-      } else {
-        console.error("Paddle SDK is not available.");
-      }
+    }
+    // Now check if successUrl is available before passing to Paddle
+    if (window.Paddle) {
+      window.Paddle.Checkout.open({
+        settings: {
+          displayMode: "inline", // Use inline checkout
+          frameTarget: "checkout-container", // Target div for iframe
+          frameInitialHeight: "450", // Set initial height for iframe
+          frameStyle:
+            "width: 100%; min-width: 312px; background-color: transparent; border: none;", // Use dynamic transactionId for successUrl
+        },
+        items: priceData, // Pass the items list
+      });
+    } else {
+      console.error("Paddle SDK is not available.");
     }
   }, [transactionId]); // Only run when transactionId is available
 
