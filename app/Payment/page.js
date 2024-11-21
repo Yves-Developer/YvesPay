@@ -1,4 +1,5 @@
 /** @format */
+
 "use client";
 import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
@@ -67,8 +68,7 @@ const Payment = () => {
           });
 
           // Open the checkout with predefined items only once
-          openCheckout(priceData, successUrl); // Pass successUrl once it's available
-          setCheckoutInitialized(true); // Set checkoutInitialized to true to prevent rerender
+          setCheckoutInitialized(true); // Set checkoutInitialized to true after initialization
         }
       };
 
@@ -82,7 +82,7 @@ const Payment = () => {
         document.head.removeChild(script); // Cleanup the script on unmount
       };
     }
-  }, [data, checkoutInitialized, successUrl]); // Include successUrl in dependencies to trigger the checkout with updated URL
+  }, [data, checkoutInitialized]); // Only run once when `data` is available
 
   // Event callback function to update product details and totals from Paddle
   const sendData = (event) => {
@@ -120,7 +120,7 @@ const Payment = () => {
 
   // Function to open the Paddle checkout
   const openCheckout = (items, successUrl) => {
-    if (window.Paddle) {
+    if (window.Paddle && successUrl) {
       window.Paddle.Checkout.open({
         settings: {
           displayMode: "inline", // Use inline checkout
@@ -132,8 +132,17 @@ const Payment = () => {
         },
         items: items, // Pass the items list
       });
+    } else {
+      console.error("Paddle checkout failed: successUrl is missing.");
     }
   };
+
+  // Open the checkout when successUrl is set
+  useEffect(() => {
+    if (successUrl && priceData.length > 0) {
+      openCheckout(priceData, successUrl); // Trigger checkout only when successUrl is available
+    }
+  }, [successUrl, priceData]); // Re-run when successUrl or priceData is updated
 
   if (loading) {
     return <Loading />; // Show loading spinner while data is being fetched
