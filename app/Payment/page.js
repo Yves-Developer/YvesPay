@@ -109,16 +109,22 @@ const Payment = () => {
         total: totals.total,
       });
 
-      setTransactionId(transaction.transaction_id); // Save the transaction ID
+      const transactionId = transaction.transaction_id;
+      setTransactionId(transactionId); // Save the transaction ID in state
+      sessionStorage.setItem("transactionId", transactionId); // Save transaction ID to sessionStorage
+
       setLoading(false); // Stop loading once product details and totals are available
     }
   };
 
+  console.log(sessionStorage.getItem("transactionId"));
   // Function to open the Paddle checkout
   const openCheckout = (productData) => {
     if (window.Paddle) {
-      const successUrl = `${window.location.origin}/download?id=${transactionId}`; // Dynamically create the success URL
-
+      // Retrieve transactionId from sessionStorage
+      const storedTransactionId = sessionStorage.getItem("transactionId");
+      console.log(storedTransactionId);
+      const successUrl = `${window.location.origin}/download?id=${storedTransactionId}`; // Dynamically create the success URL
       setSuccessUrl(successUrl); // Save successUrl in the state
 
       // Log the successUrl for debugging purposes
@@ -132,12 +138,12 @@ const Payment = () => {
           frameInitialHeight: "450", // Set initial height for iframe
           frameStyle:
             "width: 100%; min-width: 312px; background-color: transparent; border: none;",
-          successUrl: successUrl, // Use dynamic transactionId for successUrl
+          // Use dynamic transactionId for successUrl
         },
         items: productData, // Pass the items list
       });
     } else {
-      console.error("Paddle or transactionId is not available.");
+      console.error("Paddle SDK is not available.");
     }
   };
 
