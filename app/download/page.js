@@ -11,7 +11,7 @@ const Download = () => {
   useEffect(() => {
     // Only run on the client side
     const searchParams = new URLSearchParams(window.location.search);
-    const paramCustId = searchParams.get("custId");
+    const paramCustId = searchParams.get("id");
     setCustId(paramCustId); // Set the custId value
   }, []); // Empty dependency array ensures this runs only once after the component mounts
 
