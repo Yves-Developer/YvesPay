@@ -118,14 +118,14 @@ const Payment = () => {
   };
 
   console.log(transactionId);
-  const url = `${window.location.origin}/download?id=${transactionId}`;
-  setSuccessUrl(url);
+
   // Function to open the Paddle checkout
   const openCheckout = (productData) => {
     if (window.Paddle) {
       // Retrieve transactionId from sessionStorage
-
+      const url = `${window.location.origin}/download?id=${transactionId}`;
       console.log("Paddle block:", transactionId);
+      setSuccessUrl(url);
       // Dynamically create the success URL
       // Save successUrl in the state
 
