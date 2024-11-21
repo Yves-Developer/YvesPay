@@ -61,14 +61,18 @@ const Payment = () => {
 
       script.onload = () => {
         if (window.Paddle) {
+          console.log("Paddle SDK Loaded", window.Paddle); // Log for debugging
           window.Paddle.Environment.set("sandbox"); // Use "live" for production
           window.Paddle.Initialize({
             token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN, // Replace with your actual token
             eventCallback: sendData, // Event callback function
           });
 
-          // Open the checkout with predefined items only once
-          setCheckoutInitialized(true); // Set checkoutInitialized to true after initialization
+          // Log environment and initialization status
+          console.log("Paddle Initialized", window.Paddle);
+          setCheckoutInitialized(true); // Set flag after initialization
+        } else {
+          console.error("Paddle SDK failed to load.");
         }
       };
 
@@ -111,14 +115,15 @@ const Payment = () => {
     }
 
     // Assuming the transaction is paid, set the success URL with the transaction ID
-    const transactionId = event.data.transaction_id; // Get transaction ID from event
-    const generatedSuccessUrl = `${window.location.origin}/download?id=${transactionId}`; // Generate success URL with transaction ID
+    const transactionId = event.data.transaction_id;
+    const generatedSuccessUrl = `${window.location.origin}/download?id=${transactionId}`;
+    console.log("Generated Success URL:", generatedSuccessUrl); // Log for debugging
 
     // Set successUrl in state
     setSuccessUrl(generatedSuccessUrl);
   };
 
-  // Function to open the Paddle checkout
+  // Function to open the checkout when everything is ready
   const openCheckout = (items, successUrl) => {
     if (window.Paddle && successUrl) {
       window.Paddle.Checkout.open({
@@ -132,17 +137,15 @@ const Payment = () => {
         },
         items: items, // Pass the items list
       });
-    } else {
-      console.error("Paddle checkout failed: successUrl is missing.");
     }
   };
 
-  // Open the checkout when successUrl is set
+  // Open the checkout when successUrl and priceData are both available
   useEffect(() => {
-    if (successUrl && priceData.length > 0) {
-      openCheckout(priceData, successUrl); // Trigger checkout only when successUrl is available
+    if (checkoutInitialized && successUrl && priceData.length > 0) {
+      openCheckout(priceData, successUrl); // Trigger checkout only when successUrl and priceData are available
     }
-  }, [successUrl, priceData]); // Re-run when successUrl or priceData is updated
+  }, [checkoutInitialized, successUrl, priceData]); // Trigger after initialization and when URLs/data are available
 
   if (loading) {
     return <Loading />; // Show loading spinner while data is being fetched
