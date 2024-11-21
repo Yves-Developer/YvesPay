@@ -111,41 +111,32 @@ const Payment = () => {
 
       const transactionId = transaction.transaction_id;
       setTransactionId(transactionId); // Save the transaction ID in state
-      // Save transaction ID to sessionStorage
+
+      // Once the transactionId is set, create the successUrl
+      const successUrl = `${window.location.origin}/payment-success?transactionId=${transactionId}`;
+      setSuccessUrl(successUrl); // Set successUrl in state
 
       setLoading(false); // Stop loading once product details and totals are available
     }
   };
-
-  console.log("transaction id after being loaded:", transactionId);
-
+  console.log("transactionId: ", transactionId);
+  console.log("successUrl: ", successUrl);
   // Function to open the Paddle checkout
   const openCheckout = (productData) => {
-    if (window.Paddle) {
-      // Retrieve transactionId from sessionStorage
-      // const url = `${window.location.origin}/download?id=${transactionId}`;
-      // console.log("Paddle block:", transactionId);
-      // setSuccessUrl(url);
-      // Dynamically create the success URL
-      // Save successUrl in the state
-
-      // Log the successUrl for debugging purposes
-      // console.log("Constructed successUrl: ", successUrl);
-
-      // Now check if successUrl is available before passing to Paddle
+    if (window.Paddle && successUrl) {
+      // Check if successUrl is available before passing to Paddle
       window.Paddle.Checkout.open({
         settings: {
           displayMode: "inline", // Use inline checkout
           frameTarget: "checkout-container", // Target div for iframe
           frameInitialHeight: "450", // Set initial height for iframe
           frameStyle:
-            "width: 100%; min-width: 312px; background-color: transparent; border: none;",
-          // Use dynamic transactionId for successUrl
+            "width: 100%; min-width: 312px; background-color: transparent; border: none;", // Use dynamically created successUrl
         },
         items: productData, // Pass the items list
       });
     } else {
-      console.error("Paddle SDK is not available.");
+      console.error("Paddle SDK is not available or successUrl is missing.");
     }
   };
 
