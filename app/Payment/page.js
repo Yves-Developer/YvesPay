@@ -68,6 +68,7 @@ const Payment = () => {
             eventCallback: sendData, // Event callback function
           });
 
+          openCheckout(priceData); // Open the checkout once the SDK is ready
           setCheckoutInitialized(true); // Set checkoutInitialized to true
         } else {
           console.error("Paddle SDK is not available.");
@@ -116,31 +117,37 @@ const Payment = () => {
     }
   };
 
-  console.log(transactionId);
+  console.log("transaction id after being loaded:", transactionId);
 
   // Function to open the Paddle checkout
-  useEffect(() => {
-    if (transactionId) {
-      const url = `${window.location.origin}/download?id=${transactionId}`;
-      setSuccessUrl(url); // Dynamically set the successUrl after transactionId is set
-      console.log("Constructed successUrl: ", url); // Log after setting the successUrl
-    }
-    // Now check if successUrl is available before passing to Paddle
+  const openCheckout = (productData) => {
     if (window.Paddle) {
+      // Retrieve transactionId from sessionStorage
+      // const url = `${window.location.origin}/download?id=${transactionId}`;
+      // console.log("Paddle block:", transactionId);
+      // setSuccessUrl(url);
+      // Dynamically create the success URL
+      // Save successUrl in the state
+
+      // Log the successUrl for debugging purposes
+      // console.log("Constructed successUrl: ", successUrl);
+
+      // Now check if successUrl is available before passing to Paddle
       window.Paddle.Checkout.open({
         settings: {
           displayMode: "inline", // Use inline checkout
           frameTarget: "checkout-container", // Target div for iframe
           frameInitialHeight: "450", // Set initial height for iframe
           frameStyle:
-            "width: 100%; min-width: 312px; background-color: transparent; border: none;", // Use dynamic transactionId for successUrl
+            "width: 100%; min-width: 312px; background-color: transparent; border: none;",
+          // Use dynamic transactionId for successUrl
         },
-        items: priceData, // Pass the items list
+        items: productData, // Pass the items list
       });
     } else {
       console.error("Paddle SDK is not available.");
     }
-  }, [transactionId]); // Only run when transactionId is available
+  };
 
   if (loading) {
     return <Loading />;
