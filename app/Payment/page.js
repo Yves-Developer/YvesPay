@@ -111,20 +111,20 @@ const Payment = () => {
 
       const transactionId = transaction.transaction_id;
       setTransactionId(transactionId); // Save the transaction ID in state
-      sessionStorage.setItem("transactionId", transactionId); // Save transaction ID to sessionStorage
+      // Save transaction ID to sessionStorage
 
       setLoading(false); // Stop loading once product details and totals are available
     }
   };
 
-  console.log(sessionStorage.getItem("transactionId"));
+  console.log(transactionId);
   // Function to open the Paddle checkout
   const openCheckout = (productData) => {
     if (window.Paddle) {
       // Retrieve transactionId from sessionStorage
-      const storedTransactionId = sessionStorage.getItem("transactionId");
+
       console.log(storedTransactionId);
-      const successUrl = `${window.location.origin}/download?id=${storedTransactionId}`; // Dynamically create the success URL
+      const successUrl = `${window.location.origin}/download?id=${transactionId}`; // Dynamically create the success URL
       setSuccessUrl(successUrl); // Save successUrl in the state
 
       // Log the successUrl for debugging purposes
