@@ -9,11 +9,9 @@ import Loading from "@/components/ui/Loading";
 
 const Payment = () => {
   const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [checkoutInitialized, setCheckoutInitialized] = useState(false);
   const [transactionId, setTransactionId] = useState(null);
-  const [successUrl, setSuccessUrl] = useState(""); // Add state for successUrl
   const [isPaddleReady, setIsPaddleReady] = useState(false); // Flag to track if Paddle is ready
 
   // Fetch data on component mount using useEffect
@@ -23,7 +21,7 @@ const Payment = () => {
         const result = await getData(); // Fetch data (e.g., from Sanity)
         setData(result); // Set data once fetched
       } catch (err) {
-        setError(err.message); // Handle errors
+        console.error(err.message); // Handle errors
       } finally {
         setLoading(false); // End loading once data is fetched
       }
@@ -66,7 +64,18 @@ const Payment = () => {
           window.Paddle.Environment.set("sandbox"); // Use "live" for production
           window.Paddle.Initialize({
             token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN, // Replace with your actual token
-            eventCallback: sendData, // Event callback function
+
+            // Event callback function
+            eventCallback: function (data) {
+              if (data.name === "checkout.completed") {
+                console.log("Payment completed successfully:", data);
+
+                // Handle the successful payment
+                const transactionId = data.data.transaction_id;
+                // Redirect to a success page with the transactionId
+                window.location.href = `/payment-success?transactionId=${transactionId}`;
+              }
+            },
           });
 
           setIsPaddleReady(true); // Set Paddle ready flag to true after initialization
@@ -88,75 +97,30 @@ const Payment = () => {
     }
   }, [data, checkoutInitialized]); // Run only when data is available and checkout is not initialized
 
-  // Event callback function to update product details and totals from Paddle
-  const sendData = (event) => {
-    if (!event.name) return;
-
-    let items = event.data.items;
-    let transaction = event.data;
-    let totals = event.data.totals; // Paddle totals data
-
-    if (items.length > 0) {
-      const item = items[0]; // Assuming the first item is what you want
-      setProduct({
-        name: item.product.name,
-        price: item.price,
-        total: item.totals.total,
-      });
-
-      setTotals({
-        subtotal: totals.subtotal,
-        tax: totals.tax,
-        total: totals.total,
-      });
-
-      const transactionId = transaction.transaction_id;
-      setTransactionId(transactionId); // Save the transaction ID in state
-
-      // Once the transactionId is set, create the successUrl
-      const successUrl = `${window.location.origin}/payment-success?transactionId=${transactionId}`;
-      setSuccessUrl(successUrl); // Set successUrl in state
-
-      setLoading(false); // Stop loading once product details and totals are available
-    }
-  };
-
   // Function to open the Paddle checkout
   const openCheckout = (productData) => {
-    if (window.Paddle) {
-      // Ensure Paddle SDK is available, transactionId is set, successUrl is set, and Paddle is ready
+    if (window.Paddle && isPaddleReady) {
+      // Use Paddle Checkout API to open the checkout
       window.Paddle.Checkout.open({
         settings: {
-          displayMode: "inline", // Use inline checkout
-          frameTarget: "checkout-container", // Target div for iframe
-          frameInitialHeight: "450", // Set initial height for iframe
+          displayMode: "inline", // Inline checkout
+          frameTarget: "checkout-container", // The target div where the iframe will be loaded
+          frameInitialHeight: "450", // Set initial iframe height
           frameStyle:
             "width: 100%; min-width: 312px; background-color: transparent; border: none;",
-          callback: function (event) {
-            // This callback is triggered after payment success
-            if (event.name === "payment_success") {
-              const transactionId = event.data.transaction_id;
-              // Handle success - Redirect to a success page
-              window.location.href = `/download?transactionId=${transactionId}`;
-            } else {
-              // Handle other events (e.g., payment failure)
-              console.error("Payment failed:", event);
-            }
-          },
         },
-        items: productData, // Pass the items list
+        items: productData, // Product data for the checkout
       });
     } else {
-      console.error("Paddle SDK is not available or required data is missing.");
+      console.error("Paddle is not ready or required data is missing.");
     }
   };
 
   useEffect(() => {
-    // Wait for both Paddle SDK and transactionId to be available before opening the checkout
-    if (isPaddleReady && transactionId && successUrl) {
-      openCheckout(priceData);
+    if (isPaddleReady && data) {
+      openCheckout(priceData); // Open checkout once Paddle is ready
     }
-  }, [isPaddleReady, transactionId, successUrl]); // Trigger when both are ready
+  }, [isPaddleReady, data]);
 
   if (loading) {
     return <Loading />;
