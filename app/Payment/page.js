@@ -93,7 +93,7 @@ const Payment = () => {
 
     let items = event.data.items;
     let totals = event.data.totals; // Paddle totals data
-
+    console.log(items);
     if (items.length > 0) {
       const item = items[0]; // Assuming the first item is what you want
       setProduct({
@@ -123,7 +123,7 @@ const Payment = () => {
           frameInitialHeight: "450", // Set initial height for iframe
           frameStyle:
             "width: 100%; min-width: 312px; background-color: transparent; border: none;",
-          successUrl: `${window.location.origin}/download`,
+          successUrl: `${window.location.origin}/download?id=${product.total}`,
         },
         items: items, // Pass the items list
       });

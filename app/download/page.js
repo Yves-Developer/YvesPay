@@ -3,8 +3,15 @@
 import React from "react";
 // Import the check icon from lucide-react
 import { CheckCircle } from "lucide-react";
+import { useRouter } from "next/router";
+import Loading from "@/components/ui/Loading";
 
 const Download = () => {
+  const router = useRouter();
+  const { custId } = router.query;
+  if (!custId) {
+    return <Loading />;
+  }
   return (
     <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-blue-100 to-[#f3f3f3]">
       <div className="relative p-6 md:p-12 max-w-lg bg-white rounded-xl shadow-xl overflow-hidden w-full">
@@ -20,7 +27,7 @@ const Download = () => {
           </h2>
           <p className="mt-12 text-lg text-muted-foreground mb-6">
             Thank you for your purchase! Your ebook is ready to download. Click
-            the button below to get your copy.
+            the button below to get your copy. {custId}
           </p>
 
           {/* Download Button */}
