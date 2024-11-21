@@ -116,7 +116,7 @@ const Payment = () => {
 
   // Function to open the Paddle checkout
   const openCheckout = (productData) => {
-    if (window.Paddle && transactionId) {
+    if (window.Paddle) {
       const successUrl = `${window.location.origin}/download?id=${transactionId}`; // Dynamically create the success URL
 
       setSuccessUrl(successUrl); // Save successUrl in the state
