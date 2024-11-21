@@ -1,6 +1,6 @@
 /** @format */
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 // Import the check icon from lucide-react
 import { CheckCircle } from "lucide-react";
 import { useRouter } from "next/router";
@@ -8,10 +8,21 @@ import Loading from "@/components/ui/Loading";
 
 const Download = () => {
   const router = useRouter();
-  const { custId } = router.query;
+  const [custId, setCustId] = useState(null);
+
+  // Only access router.query when the router is ready (client-side)
+  useEffect(() => {
+    if (router.isReady) {
+      const { custId } = router.query;
+      setCustId(custId); // Set the custId after the router is ready
+    }
+  }, [router.isReady, router.query]);
+
+  // If custId is not available (either during SSR or waiting for client-side data)
   if (!custId) {
     return <Loading />;
   }
+
   return (
     <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-blue-100 to-[#f3f3f3]">
       <div className="relative p-6 md:p-12 max-w-lg bg-white rounded-xl shadow-xl overflow-hidden w-full">
