@@ -1,5 +1,5 @@
 /** @format */
-
+"use client";
 import React from "react";
 // Import the check icon from lucide-react
 import { CheckCircle } from "lucide-react";
