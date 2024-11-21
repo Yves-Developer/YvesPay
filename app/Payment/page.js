@@ -14,6 +14,7 @@ const Payment = () => {
   const [checkoutInitialized, setCheckoutInitialized] = useState(false);
   const [transactionId, setTransactionId] = useState(null);
   const [successUrl, setSuccessUrl] = useState(""); // Add state for successUrl
+  const [isPaddleReady, setIsPaddleReady] = useState(false); // Flag to track if Paddle is ready
 
   // Fetch data on component mount using useEffect
   useEffect(() => {
@@ -68,7 +69,7 @@ const Payment = () => {
             eventCallback: sendData, // Event callback function
           });
 
-          openCheckout(priceData); // Open the checkout once the SDK is ready
+          setIsPaddleReady(true); // Set Paddle ready flag to true after initialization
           setCheckoutInitialized(true); // Set checkoutInitialized to true
         } else {
           console.error("Paddle SDK is not available.");
@@ -119,26 +120,33 @@ const Payment = () => {
       setLoading(false); // Stop loading once product details and totals are available
     }
   };
-  console.log("transactionId: ", transactionId);
-  console.log("successUrl: ", successUrl);
+
   // Function to open the Paddle checkout
   const openCheckout = (productData) => {
-    if (window.Paddle && transactionId) {
-      // Check if successUrl is available before passing to Paddle
+    if (window.Paddle && transactionId && successUrl && isPaddleReady) {
+      // Ensure Paddle SDK is available, transactionId is set, successUrl is set, and Paddle is ready
       window.Paddle.Checkout.open({
         settings: {
           displayMode: "inline", // Use inline checkout
           frameTarget: "checkout-container", // Target div for iframe
           frameInitialHeight: "450", // Set initial height for iframe
           frameStyle:
-            "width: 100%; min-width: 312px; background-color: transparent; border: none;", // Use dynamically created successUrl
+            "width: 100%; min-width: 312px; background-color: transparent; border: none;",
+          successUrl: successUrl, // Use dynamically created successUrl
         },
         items: productData, // Pass the items list
       });
     } else {
-      console.error("Paddle SDK is not available or successUrl is missing.");
+      console.error("Paddle SDK is not available or required data is missing.");
     }
   };
+
+  useEffect(() => {
+    // Wait for both Paddle SDK and transactionId to be available before opening the checkout
+    if (isPaddleReady && transactionId && successUrl) {
+      openCheckout(priceData);
+    }
+  }, [isPaddleReady, transactionId, successUrl]); // Trigger when both are ready
 
   if (loading) {
     return <Loading />;
