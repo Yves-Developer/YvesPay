@@ -123,7 +123,7 @@ const Payment = () => {
 
   // Function to open the Paddle checkout
   const openCheckout = (productData) => {
-    if (window.Paddle && transactionId && successUrl && isPaddleReady) {
+    if (window.Paddle) {
       // Ensure Paddle SDK is available, transactionId is set, successUrl is set, and Paddle is ready
       window.Paddle.Checkout.open({
         settings: {
@@ -132,7 +132,17 @@ const Payment = () => {
           frameInitialHeight: "450", // Set initial height for iframe
           frameStyle:
             "width: 100%; min-width: 312px; background-color: transparent; border: none;",
-          successUrl: successUrl, // Use dynamically created successUrl
+          callback: function (event) {
+            // This callback is triggered after payment success
+            if (event.name === "payment_success") {
+              const transactionId = event.data.transaction_id;
+              // Handle success - Redirect to a success page
+              window.location.href = `/download?transactionId=${transactionId}`;
+            } else {
+              // Handle other events (e.g., payment failure)
+              console.error("Payment failed:", event);
+            }
+          },
         },
         items: productData, // Pass the items list
       });
