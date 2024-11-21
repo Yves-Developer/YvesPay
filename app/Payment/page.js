@@ -92,6 +92,8 @@ const Payment = () => {
     if (!event.name) return;
 
     let items = event.data.items;
+    let transaction = event.data;
+    console.log(transaction);
     let totals = event.data.totals; // Paddle totals data
     console.log(items);
     if (items.length > 0) {
@@ -123,7 +125,7 @@ const Payment = () => {
           frameInitialHeight: "450", // Set initial height for iframe
           frameStyle:
             "width: 100%; min-width: 312px; background-color: transparent; border: none;",
-          successUrl: `${window.location.origin}/download?id=${product.total}`,
+          successUrl: `${window.location.origin}/download?id=111}`,
         },
         items: items, // Pass the items list
       });
