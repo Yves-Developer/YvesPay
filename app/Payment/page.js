@@ -3,9 +3,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ShoppingCart } from "lucide-react"; // Icons for payment options
 import { getData } from "../lib/FetchData";
 import Loading from "@/components/ui/Loading";
 
@@ -93,14 +91,12 @@ const Payment = () => {
 
     let items = event.data.items;
     let transaction = event.data;
-    console.log(transaction);
+    console.log("transaction_id", transaction.transaction_id);
     let totals = event.data.totals; // Paddle totals data
-    console.log(items);
     if (items.length > 0) {
       const item = items[0]; // Assuming the first item is what you want
       setProduct({
         name: item.product.name,
-        price: item.price,
         total: item.totals.total,
       });
 
@@ -113,10 +109,17 @@ const Payment = () => {
 
       setLoading(false); // Stop loading once product details and totals are available
     }
+
+    // Assuming the transaction is paid, set the success URL with the transaction ID
+    const transactionId = event.data.transaction_id; // Get transaction ID from event
+    const successUrl = `${window.location.origin}/download?id=${transactionId}`; // Pass the transaction ID in the URL
+
+    // Open the checkout with the correct success URL
+    openCheckout(priceData, successUrl);
   };
 
   // Function to open the Paddle checkout
-  const openCheckout = (items) => {
+  const openCheckout = (items, successUrl) => {
     if (window.Paddle) {
       window.Paddle.Checkout.open({
         settings: {
@@ -125,7 +128,7 @@ const Payment = () => {
           frameInitialHeight: "450", // Set initial height for iframe
           frameStyle:
             "width: 100%; min-width: 312px; background-color: transparent; border: none;",
-          successUrl: `${window.location.origin}/download?id=111}`,
+          successUrl: successUrl, // Set the success URL to the one with the transaction ID
         },
         items: items, // Pass the items list
       });
