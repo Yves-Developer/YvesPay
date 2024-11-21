@@ -3,16 +3,17 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ShoppingCart } from "lucide-react"; // Icons for payment options
 import { getData } from "../lib/FetchData";
 import Loading from "@/components/ui/Loading";
 
 const Payment = () => {
   const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [checkoutInitialized, setCheckoutInitialized] = useState(false);
-  const [transactionId, setTransactionId] = useState(null);
-  const [isPaddleReady, setIsPaddleReady] = useState(false); // Flag to track if Paddle is ready
+  const [checkoutInitialized, setCheckoutInitialized] = useState(false); // Track if checkout is initialized
 
   // Fetch data on component mount using useEffect
   useEffect(() => {
@@ -21,7 +22,7 @@ const Payment = () => {
         const result = await getData(); // Fetch data (e.g., from Sanity)
         setData(result); // Set data once fetched
       } catch (err) {
-        console.error(err.message); // Handle errors
+        setError(err.message); // Handle errors
       } finally {
         setLoading(false); // End loading once data is fetched
       }
@@ -55,6 +56,7 @@ const Payment = () => {
   // Load Paddle script dynamically once the data is available
   useEffect(() => {
     if (data && !checkoutInitialized) {
+      // Ensure the script is loaded once
       const script = document.createElement("script");
       script.src = "https://cdn.paddle.com/paddle/v2/paddle.js";
       script.async = true;
@@ -64,24 +66,12 @@ const Payment = () => {
           window.Paddle.Environment.set("sandbox"); // Use "live" for production
           window.Paddle.Initialize({
             token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN, // Replace with your actual token
-
-            // Event callback function
-            eventCallback: function (data) {
-              if (data.name === "checkout.completed") {
-                console.log("Payment completed successfully:", data);
-
-                // Handle the successful payment
-                const transactionId = data.data.transaction_id;
-                // Redirect to a success page with the transactionId
-                window.location.href = `/payment-success?transactionId=${transactionId}`;
-              }
-            },
+            eventCallback: sendData, // Event callback function
           });
 
-          setIsPaddleReady(true); // Set Paddle ready flag to true after initialization
+          // Open the checkout with predefined items only once
+          openCheckout(priceData);
           setCheckoutInitialized(true); // Set checkoutInitialized to true
-        } else {
-          console.error("Paddle SDK is not available.");
         }
       };
 
@@ -97,30 +87,48 @@ const Payment = () => {
     }
   }, [data, checkoutInitialized]); // Run only when data is available and checkout is not initialized
 
-  // Function to open the Paddle checkout
-  const openCheckout = (productData) => {
-    if (window.Paddle && isPaddleReady) {
-      // Use Paddle Checkout API to open the checkout
-      window.Paddle.Checkout.open({
-        settings: {
-          displayMode: "inline", // Inline checkout
-          frameTarget: "checkout-container", // The target div where the iframe will be loaded
-          frameInitialHeight: "450", // Set initial iframe height
-          frameStyle:
-            "width: 100%; min-width: 312px; background-color: transparent; border: none;",
-        },
-        items: productData, // Product data for the checkout
+  // Event callback function to update product details and totals from Paddle
+  const sendData = (event) => {
+    if (!event.name) return;
+
+    let items = event.data.items;
+    let totals = event.data.totals; // Paddle totals data
+
+    if (items.length > 0) {
+      const item = items[0]; // Assuming the first item is what you want
+      setProduct({
+        name: item.product.name,
+        price: item.price,
+        total: item.totals.total,
       });
-    } else {
-      console.error("Paddle is not ready or required data is missing.");
+
+      // Set the totals (tax, subtotal, total)
+      setTotals({
+        subtotal: totals.subtotal,
+        tax: totals.tax,
+        total: totals.total,
+      });
+
+      setLoading(false); // Stop loading once product details and totals are available
     }
   };
 
-  useEffect(() => {
-    if (isPaddleReady && data) {
-      openCheckout(priceData); // Open checkout once Paddle is ready
+  // Function to open the Paddle checkout
+  const openCheckout = (items) => {
+    if (window.Paddle) {
+      window.Paddle.Checkout.open({
+        settings: {
+          displayMode: "inline", // Use inline checkout
+          frameTarget: "checkout-container", // Target div for iframe
+          frameInitialHeight: "450", // Set initial height for iframe
+          frameStyle:
+            "width: 100%; min-width: 312px; background-color: transparent; border: none;",
+          successUrl: `${window.location.origin}/download`,
+        },
+        items: items, // Pass the items list
+      });
     }
-  }, [isPaddleReady, data]);
+  };
 
   if (loading) {
     return <Loading />;
