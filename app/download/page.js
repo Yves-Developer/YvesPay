@@ -1,24 +1,21 @@
 /** @format */
 "use client";
 import React, { useEffect, useState } from "react";
-// Import the check icon from lucide-react
 import { CheckCircle } from "lucide-react";
-import { useRouter } from "next/router";
 import Loading from "@/components/ui/Loading";
 
 const Download = () => {
-  const router = useRouter();
   const [custId, setCustId] = useState(null);
 
-  // Only access router.query when the router is ready (client-side)
+  // Use `useEffect` to run the client-side logic once the component is mounted
   useEffect(() => {
-    if (router.isReady) {
-      const { custId } = router.query;
-      setCustId(custId); // Set the custId after the router is ready
-    }
-  }, [router.isReady, router.query]);
+    // Only run on the client side
+    const searchParams = new URLSearchParams(window.location.search);
+    const paramCustId = searchParams.get("custId");
+    setCustId(paramCustId); // Set the custId value
+  }, []); // Empty dependency array ensures this runs only once after the component mounts
 
-  // If custId is not available (either during SSR or waiting for client-side data)
+  // Show loading until custId is available
   if (!custId) {
     return <Loading />;
   }
