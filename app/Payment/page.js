@@ -1,6 +1,7 @@
 /** @format */
 
 "use client";
+
 import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { getData } from "../lib/FetchData";
@@ -11,7 +12,6 @@ const Payment = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [checkoutInitialized, setCheckoutInitialized] = useState(false); // Track if checkout is initialized
-  const [successUrl, setSuccessUrl] = useState(""); // Track the successUrl with transaction ID
 
   // Fetch data on component mount using useEffect
   useEffect(() => {
@@ -29,7 +29,6 @@ const Payment = () => {
     fetchData(); // Call the function to fetch data
   }, []); // Only run this once when component mounts
 
-  // State to store product details and totals for Paddle
   const [product, setProduct] = useState({
     name: "",
     price: 0,
@@ -40,6 +39,7 @@ const Payment = () => {
     tax: 0,
     total: 0,
   });
+  const [successUrl, setSuccessUrl] = useState(""); // Track the success URL
 
   // Dynamically create the priceData once data is available
   const priceData = data
@@ -61,18 +61,15 @@ const Payment = () => {
 
       script.onload = () => {
         if (window.Paddle) {
-          console.log("Paddle SDK Loaded", window.Paddle); // Log for debugging
           window.Paddle.Environment.set("sandbox"); // Use "live" for production
           window.Paddle.Initialize({
             token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN, // Replace with your actual token
             eventCallback: sendData, // Event callback function
           });
 
-          // Log environment and initialization status
-          console.log("Paddle Initialized", window.Paddle);
-          setCheckoutInitialized(true); // Set flag after initialization
-        } else {
-          console.error("Paddle SDK failed to load.");
+          // Open the checkout with predefined items only once
+          openCheckout(priceData);
+          setCheckoutInitialized(true); // Set checkoutInitialized to true
         }
       };
 
@@ -86,14 +83,13 @@ const Payment = () => {
         document.head.removeChild(script); // Cleanup the script on unmount
       };
     }
-  }, [data, checkoutInitialized]); // Only run once when `data` is available
+  }, [data, checkoutInitialized]); // Run only when data is available and checkout is not initialized
 
   // Event callback function to update product details and totals from Paddle
   const sendData = (event) => {
     if (!event.name) return;
 
     let items = event.data.items;
-    let transaction = event.data;
     let totals = event.data.totals; // Paddle totals data
 
     if (items.length > 0) {
@@ -112,19 +108,18 @@ const Payment = () => {
       });
 
       setLoading(false); // Stop loading once product details and totals are available
+
+      // Set the success URL with the transaction ID dynamically
+      const transactionId = event.data.transaction_id;
+      const generatedSuccessUrl = `${window.location.origin}/download?id=${transactionId}`;
+      console.log("Generated Success URL:", generatedSuccessUrl); // Log for debugging
+
+      setSuccessUrl(generatedSuccessUrl); // Set the successUrl in state
     }
-
-    // Assuming the transaction is paid, set the success URL with the transaction ID
-    const transactionId = event.data.transaction_id;
-    const generatedSuccessUrl = `${window.location.origin}/download?id=${transactionId}`;
-    console.log("Generated Success URL:", generatedSuccessUrl); // Log for debugging
-
-    // Set successUrl in state
-    setSuccessUrl(generatedSuccessUrl);
   };
 
-  // Function to open the checkout when everything is ready
-  const openCheckout = (items, successUrl) => {
+  // Function to open the Paddle checkout with dynamic successUrl
+  const openCheckout = (productData) => {
     if (window.Paddle && successUrl) {
       window.Paddle.Checkout.open({
         settings: {
@@ -133,22 +128,17 @@ const Payment = () => {
           frameInitialHeight: "450", // Set initial height for iframe
           frameStyle:
             "width: 100%; min-width: 312px; background-color: transparent; border: none;",
-          successUrl: successUrl, // Set the success URL dynamically with transaction ID
+          successUrl: successUrl, // Use the dynamic successUrl
         },
-        items: items, // Pass the items list
+        items: productData, // Pass the items list
       });
+    } else {
+      console.error("Paddle or Success URL not available.");
     }
   };
 
-  // Open the checkout when successUrl and priceData are both available
-  useEffect(() => {
-    if (checkoutInitialized && successUrl && priceData.length > 0) {
-      openCheckout(priceData, successUrl); // Trigger checkout only when successUrl and priceData are available
-    }
-  }, [checkoutInitialized, successUrl, priceData]); // Trigger after initialization and when URLs/data are available
-
   if (loading) {
-    return <Loading />; // Show loading spinner while data is being fetched
+    return <Loading />;
   }
 
   return (
