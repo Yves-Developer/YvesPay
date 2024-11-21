@@ -1,7 +1,5 @@
 /** @format */
 
-"use client";
-
 import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { getData } from "../lib/FetchData";
@@ -12,6 +10,7 @@ const Payment = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [checkoutInitialized, setCheckoutInitialized] = useState(false); // Track if checkout is initialized
+  const [successUrl, setSuccessUrl] = useState(""); // Track the successUrl with transaction ID
 
   // Fetch data on component mount using useEffect
   useEffect(() => {
@@ -68,8 +67,8 @@ const Payment = () => {
           });
 
           // Open the checkout with predefined items only once
-          openCheckout(priceData);
-          setCheckoutInitialized(true); // Set checkoutInitialized to true
+          openCheckout(priceData, successUrl); // Pass successUrl once it's available
+          setCheckoutInitialized(true); // Set checkoutInitialized to true to prevent rerender
         }
       };
 
@@ -83,7 +82,7 @@ const Payment = () => {
         document.head.removeChild(script); // Cleanup the script on unmount
       };
     }
-  }, [data, checkoutInitialized]); // Run only when data is available and checkout is not initialized
+  }, [data, checkoutInitialized, successUrl]); // Include successUrl in dependencies to trigger the checkout with updated URL
 
   // Event callback function to update product details and totals from Paddle
   const sendData = (event) => {
@@ -91,12 +90,13 @@ const Payment = () => {
 
     let items = event.data.items;
     let transaction = event.data;
-    console.log("transaction_id", transaction.transaction_id);
     let totals = event.data.totals; // Paddle totals data
+
     if (items.length > 0) {
       const item = items[0]; // Assuming the first item is what you want
       setProduct({
         name: item.product.name,
+        price: item.price,
         total: item.totals.total,
       });
 
@@ -112,10 +112,10 @@ const Payment = () => {
 
     // Assuming the transaction is paid, set the success URL with the transaction ID
     const transactionId = event.data.transaction_id; // Get transaction ID from event
-    const successUrl = `${window.location.origin}/download?id=${transactionId}`; // Pass the transaction ID in the URL
+    const generatedSuccessUrl = `${window.location.origin}/download?id=${transactionId}`; // Generate success URL with transaction ID
 
-    // Open the checkout with the correct success URL
-    openCheckout(priceData, successUrl);
+    // Set successUrl in state
+    setSuccessUrl(generatedSuccessUrl);
   };
 
   // Function to open the Paddle checkout
@@ -128,7 +128,7 @@ const Payment = () => {
           frameInitialHeight: "450", // Set initial height for iframe
           frameStyle:
             "width: 100%; min-width: 312px; background-color: transparent; border: none;",
-          successUrl: successUrl, // Set the success URL to the one with the transaction ID
+          successUrl: successUrl, // Set the success URL dynamically with transaction ID
         },
         items: items, // Pass the items list
       });
@@ -136,7 +136,7 @@ const Payment = () => {
   };
 
   if (loading) {
-    return <Loading />;
+    return <Loading />; // Show loading spinner while data is being fetched
   }
 
   return (
