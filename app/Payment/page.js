@@ -123,7 +123,7 @@ const Payment = () => {
     if (window.Paddle) {
       // Retrieve transactionId from sessionStorage
 
-      console.log(storedTransactionId);
+      console.log(transactionId);
       const successUrl = `${window.location.origin}/download?id=${transactionId}`; // Dynamically create the success URL
       setSuccessUrl(successUrl); // Save successUrl in the state
 
