@@ -30,6 +30,14 @@ export default {
       title: 'Price',
     },
     {
+      name: 'zipFile',
+      title: 'Ebbok ZIP File',
+      type: 'file', // Type set to 'file' for any file type
+      options: {
+        accept: '.zip', // Restrict file selection to ZIP files only
+      },
+    },
+    {
       name: 'priceId',
       type: 'string',
       title: 'Price ID',

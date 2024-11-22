@@ -4,26 +4,27 @@
 import React, { useEffect, useState } from "react";
 import { CheckCircle } from "lucide-react";
 import Loading from "@/components/ui/Loading";
+import { getData } from "../lib/FetchData";
+import { client } from "../lib/sanity"; // Assuming client is exported from your sanity.js
 
 const Download = () => {
   const [custId, setCustId] = useState(null);
   const [customerData, setCustomerData] = useState(null); // Store customer data fetched from API
   const [loadingData, setLoadingData] = useState(true); // To track data loading state
   const [error, setError] = useState(null); // To store any error during the fetch process
+  const [productData, setProductData] = useState(null); // Store product data including zipFile URL
 
-  // Use `useEffect` to run the client-side logic once the component is mounted
+  // Fetch customer data based on custId
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const paramCustId = searchParams.get("id");
     setCustId(paramCustId); // Set the custId value
 
-    // If there's a custId, fetch customer data from API
     if (paramCustId) {
       fetchCustomerData(paramCustId);
     }
-  }, []); // Empty dependency array ensures this runs only once after the component mounts
+  }, []); // Empty dependency ensures this runs only once after the component mounts
 
-  // Fetch customer data using the provided custId
   const fetchCustomerData = async (custId) => {
     setLoadingData(true);
     try {
@@ -34,7 +35,7 @@ const Download = () => {
         throw new Error(data.message || "Error fetching customer data.");
       }
 
-      setCustomerData(data); // Set the customer data fetched from the API
+      setCustomerData(data); // Set the customer data
     } catch (error) {
       setError(error.message); // Set error message
     } finally {
@@ -42,23 +43,39 @@ const Download = () => {
     }
   };
 
-  // Show loading until custId and data are available
+  // Fetch product data if customer has paid
+  useEffect(() => {
+    if (customerData && customerData.hasPaid) {
+      const fetchProductData = async () => {
+        try {
+          const data = await getData(); // Fetch product data
+          const zipFileUrl = data.zipFile?.asset
+            ? await client.getDocument(data.zipFile.asset._ref)
+            : null;
+          const link = zipFileUrl ? zipFileUrl.url : null;
+          setProductData({ ...data, zipFileUrl: link });
+        } catch (error) {
+          setError("Error fetching product data.");
+        }
+      };
+
+      fetchProductData();
+    }
+  }, [customerData]); // Run this effect when customer data is available
+
   if (loadingData) {
     return <Loading />;
   }
 
-  // Handle error if customer data couldn't be fetched
   if (error) {
     return <div>Error: {error}</div>;
   }
 
-  // Check if customerData exists before accessing properties
   if (!customerData) {
     return <div>Error: No customer data available.</div>;
   }
 
-  // Conditional rendering based on payment status
-  if (customerData.hasPaid) {
+  if (customerData.hasPaid && productData) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-blue-100 to-[#f3f3f3]">
         <div className="relative p-6 md:p-12 max-w-lg bg-white rounded-xl shadow-xl overflow-hidden w-full">
@@ -79,8 +96,9 @@ const Download = () => {
 
             {/* Download Button */}
             <a
-              href={customerData?.downloadLink || "/path/to/your/ebook.pdf"} // Use download link from customer data
+              href={productData.zipFileUrl} // Use the resolved zipFile URL
               className="inline-block px-8 py-4 bg-blue-500 text-white text-lg font-medium rounded-md shadow-lg transform transition-all hover:scale-105"
+              download={`${productData.name}-${productData.keyword}.zip`}
             >
               Download Your Ebook
             </a>
