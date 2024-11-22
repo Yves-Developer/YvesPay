@@ -43,7 +43,7 @@ const Download = () => {
   };
 
   // Show loading until custId and data are available
-  if (!custId || loadingData) {
+  if (loadingData) {
     return <Loading />;
   }
 
@@ -52,38 +52,62 @@ const Download = () => {
     return <div>Error: {error}</div>;
   }
 
-  return (
-    <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-blue-100 to-[#f3f3f3]">
-      <div className="relative p-6 md:p-12 max-w-lg bg-white rounded-xl shadow-xl overflow-hidden w-full">
-        {/* Decorative elements */}
-        <div className="absolute top-[-50px] right-[-50px] w-44 h-44 rounded-full bg-blue-300 opacity-30"></div>
-        <div className="absolute bottom-[-60px] left-[-60px] w-32 h-32 rounded-lg bg-blue-300 opacity-30"></div>
+  // Check if customerData exists before accessing properties
+  if (!customerData) {
+    return <div>Error: No customer data available.</div>;
+  }
 
-        <div className="text-center">
-          {/* Success Message */}
-          <h2 className="text-4xl font-semibold text-green-500 mb-4 flex justify-center items-center">
-            <CheckCircle className="mr-3 text-green-500" size={30} /> Payment
-            Successful!
-          </h2>
-          <p className="mt-12 text-lg text-muted-foreground mb-6">
-            Thank you for your purchase! Your ebook is ready to download. Click
-            the button below to get your copy. {JSON.stringify(customerData)}
-          </p>
+  // Conditional rendering based on payment status
+  if (customerData.hasPaid) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-blue-100 to-[#f3f3f3]">
+        <div className="relative p-6 md:p-12 max-w-lg bg-white rounded-xl shadow-xl overflow-hidden w-full">
+          {/* Decorative elements */}
+          <div className="absolute top-[-50px] right-[-50px] w-44 h-44 rounded-full bg-blue-300 opacity-30"></div>
+          <div className="absolute bottom-[-60px] left-[-60px] w-32 h-32 rounded-lg bg-blue-300 opacity-30"></div>
 
-          {/* Download Button */}
-          <a
-            href={customerData?.downloadLink || "/path/to/your/ebook.pdf"} // Use download link from customer data
-            className="inline-block px-8 py-4 bg-blue-500 text-white text-lg font-medium rounded-md shadow-lg transform transition-all hover:scale-105"
-          >
-            Download Your Ebook
-          </a>
+          <div className="text-center">
+            {/* Success Message */}
+            <h2 className="text-4xl font-semibold text-green-500 mb-4 flex justify-center items-center">
+              <CheckCircle className="mr-3 text-green-500" size={30} /> Payment
+              Successful!
+            </h2>
+            <p className="mt-12 text-lg text-muted-foreground mb-6">
+              Thank you for your purchase! Your ebook is ready to download.
+              Click the button below to get your copy.
+            </p>
+
+            {/* Download Button */}
+            <a
+              href={customerData?.downloadLink || "/path/to/your/ebook.pdf"} // Use download link from customer data
+              className="inline-block px-8 py-4 bg-blue-500 text-white text-lg font-medium rounded-md shadow-lg transform transition-all hover:scale-105"
+            >
+              Download Your Ebook
+            </a>
+          </div>
+
+          {/* Decorative Accents */}
+          <div className="absolute top-0 left-0 h-32 w-full bg-gradient-to-r from-white to-[#f3f3f3] opacity-50 rounded-t-xl"></div>
         </div>
-
-        {/* Decorative Accents */}
-        <div className="absolute top-0 left-0 h-32 w-full bg-gradient-to-r from-white to-[#f3f3f3] opacity-50 rounded-t-xl"></div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-blue-100 to-[#f3f3f3]">
+        <div className="relative p-6 md:p-12 max-w-lg bg-white rounded-xl shadow-xl overflow-hidden w-full">
+          {/* Decorative elements */}
+          <div className="absolute top-[-50px] right-[-50px] w-44 h-44 rounded-full bg-blue-300 opacity-30"></div>
+          <div className="absolute bottom-[-60px] left-[-60px] w-32 h-32 rounded-lg bg-blue-300 opacity-30"></div>
+          <h2 className="text-lg text-red-500 font-semibold">
+            Unfortunately, You have not paid yet.
+          </h2>
+          <p className="text-lg text-muted-foreground mt-4">
+            Please complete your payment to access the download link.
+          </p>
+        </div>
+      </div>
+    );
+  }
 };
 
 export default Download;
