@@ -1,93 +1,69 @@
 /** @format */
+
 "use client";
 
 import React, { useEffect, useState } from "react";
 import { CheckCircle } from "lucide-react";
 import Loading from "@/components/ui/Loading";
 import { getData } from "../lib/FetchData";
-import { client } from "../lib/sanity"; // Assuming client is exported from your sanity.js
+import { client } from "../lib/sanity";
 
 const Download = () => {
-  const [custId, setCustId] = useState(null);
   const [customerData, setCustomerData] = useState(null); // Store customer data fetched from API
-  const [loadingData, setLoadingData] = useState(true); // To track data loading state
-  const [error, setError] = useState(null); // To store any error during the fetch process
-  const [productData, setProductData] = useState(null); // Store product data including zipFile URL
+  const [productData, setProductData] = useState(null); // Store product data
+  const [isLoading, setIsLoading] = useState(true); // Track loading state for data
+  const [error, setError] = useState(null); // Store any error during the fetch process
 
-  // Fetch customer data based on custId
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    const paramCustId = searchParams.get("id");
-    setCustId(paramCustId); // Set the custId value
+    const custId = searchParams.get("id");
 
-    if (paramCustId) {
-      fetchCustomerData(paramCustId);
+    if (custId) {
+      fetchCustomerData(custId); // Fetch customer data on load
+    } else {
+      setError("No customer ID provided.");
+      setIsLoading(false); // If no ID, stop loading and show error
     }
-  }, []); // Empty dependency ensures this runs only once after the component mounts
+  }, []); // Empty array ensures this runs once when the component is mounted
 
   const fetchCustomerData = async (custId) => {
-    setLoadingData(true);
+    setIsLoading(true); // Start loading when fetching data
     try {
       const response = await fetch(`/api/check?id=${custId}`);
       const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.message || "Error fetching customer data.");
-      }
-
-      setCustomerData(data); // Set the customer data
-    } catch (error) {
-      setError(error.message); // Set error message
-    } finally {
-      setLoadingData(false);
-    }
-  };
-
-  // Fetch product data if customer has paid
-  useEffect(() => {
-    if (customerData && customerData.hasPaid) {
-      const fetchProductData = async () => {
-        try {
-          const data = await getData(); // Fetch product data
-          const zipFileUrl = data.zipFile?.asset
-            ? await client.getDocument(data.zipFile.asset._ref)
-            : null;
-          const link = zipFileUrl ? zipFileUrl.url : null;
-          setProductData({ ...data, zipFileUrl: link });
-        } catch (error) {
-          setError("Error fetching product data.");
+      if (response.ok && data) {
+        setCustomerData(data);
+        // Fetch product data if user has paid
+        if (data.hasPaid) {
+          fetchProductData();
         }
-      };
-
-      fetchProductData();
-    }
-  }, [customerData]); // Run this effect when customer data is available
-
-  // Function to manually trigger a refetch of customer data
-  const handlePaymentSuccess = async () => {
-    setLoadingData(true);
-    try {
-      const response = await fetch(`/api/check?id=${custId}`);
-      const data = await response.json();
-      if (data.hasPaid) {
-        setCustomerData(data); // Update the customer data
-        const productData = await getData();
-        const zipFileUrl = productData.zipFile?.asset
-          ? await client.getDocument(productData.zipFile.asset._ref)
-          : null;
-        const link = zipFileUrl ? zipFileUrl.url : null;
-        setProductData({ ...productData, zipFileUrl: link }); // Update the product data
       } else {
         setCustomerData({ hasPaid: false });
+        setError("Payment status not found.");
       }
     } catch (error) {
-      setError("Error fetching updated payment status.");
+      setError("Error fetching customer data.");
     } finally {
-      setLoadingData(false);
+      setIsLoading(false); // Stop loading after fetching data
     }
   };
 
-  if (loadingData) {
+  const fetchProductData = async () => {
+    try {
+      const data = await getData();
+      const zipFileUrl = data.zipFile?.asset
+        ? await client.getDocument(data.zipFile.asset._ref)
+        : null;
+      const link = zipFileUrl ? zipFileUrl.url : null;
+      setProductData({ ...data, zipFileUrl: link });
+    } catch (error) {
+      setError("Error fetching product data.");
+    }
+  };
+
+  // Display a loading screen if data is still being fetched
+  if (isLoading) {
     return <Loading />;
   }
 
@@ -95,20 +71,15 @@ const Download = () => {
     return <div>Error: {error}</div>;
   }
 
-  if (!customerData) {
-    return <div>Error: No customer data available.</div>;
-  }
-
-  if (customerData.hasPaid && productData) {
+  // Once data is loaded, render the correct content based on payment status
+  if (customerData && customerData.hasPaid && productData) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-blue-100 to-[#f3f3f3]">
         <div className="relative p-6 md:p-12 max-w-lg bg-white rounded-xl shadow-xl overflow-hidden w-full">
-          {/* Decorative elements */}
           <div className="absolute top-[-50px] right-[-50px] w-44 h-44 rounded-full bg-blue-300 opacity-30"></div>
           <div className="absolute bottom-[-60px] left-[-60px] w-32 h-32 rounded-lg bg-blue-300 opacity-30"></div>
 
           <div className="text-center">
-            {/* Success Message */}
             <h2 className="text-4xl font-semibold text-green-500 mb-4 flex justify-center items-center">
               <CheckCircle className="mr-3 text-green-500" size={30} /> Payment
               Successful!
@@ -127,9 +98,6 @@ const Download = () => {
               Download Your Ebook
             </a>
           </div>
-
-          {/* Decorative Accents */}
-          <div className="absolute top-0 left-0 h-32 w-full bg-gradient-to-r from-white to-[#f3f3f3] opacity-50 rounded-t-xl"></div>
         </div>
       </div>
     );
@@ -137,7 +105,6 @@ const Download = () => {
     return (
       <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-blue-100 to-[#f3f3f3]">
         <div className="relative p-6 md:p-12 max-w-lg bg-white rounded-xl shadow-xl overflow-hidden w-full">
-          {/* Decorative elements */}
           <div className="absolute top-[-50px] right-[-50px] w-44 h-44 rounded-full bg-blue-300 opacity-30"></div>
           <div className="absolute bottom-[-60px] left-[-60px] w-32 h-32 rounded-lg bg-blue-300 opacity-30"></div>
           <h2 className="text-lg text-red-500 font-semibold">
@@ -147,7 +114,7 @@ const Download = () => {
             Please complete your payment to access the download link.
           </p>
           <a
-            href="/Product" // Use download link from customer data
+            href="/Product" // Link to purchase page
             className="inline-block px-4 py-3 bg-blue-500 text-white text-lg font-medium rounded-md shadow-lg transform transition-all hover:scale-105"
           >
             Buy Now
