@@ -1,23 +1,55 @@
 /** @format */
 "use client";
+
 import React, { useEffect, useState } from "react";
 import { CheckCircle } from "lucide-react";
 import Loading from "@/components/ui/Loading";
 
 const Download = () => {
   const [custId, setCustId] = useState(null);
+  const [customerData, setCustomerData] = useState(null); // Store customer data fetched from API
+  const [loadingData, setLoadingData] = useState(true); // To track data loading state
+  const [error, setError] = useState(null); // To store any error during the fetch process
 
   // Use `useEffect` to run the client-side logic once the component is mounted
   useEffect(() => {
-    // Only run on the client side
     const searchParams = new URLSearchParams(window.location.search);
     const paramCustId = searchParams.get("id");
     setCustId(paramCustId); // Set the custId value
+
+    // If there's a custId, fetch customer data from API
+    if (paramCustId) {
+      fetchCustomerData(paramCustId);
+    }
   }, []); // Empty dependency array ensures this runs only once after the component mounts
 
-  // Show loading until custId is available
-  if (!custId) {
+  // Fetch customer data using the provided custId
+  const fetchCustomerData = async (custId) => {
+    setLoadingData(true);
+    try {
+      const response = await fetch(`/api/check?id=${custId}`);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Error fetching customer data.");
+      }
+
+      setCustomerData(data); // Set the customer data fetched from the API
+    } catch (error) {
+      setError(error.message); // Set error message
+    } finally {
+      setLoadingData(false);
+    }
+  };
+
+  // Show loading until custId and data are available
+  if (!custId || loadingData) {
     return <Loading />;
+  }
+
+  // Handle error if customer data couldn't be fetched
+  if (error) {
+    return <div>Error: {error}</div>;
   }
 
   return (
@@ -35,12 +67,12 @@ const Download = () => {
           </h2>
           <p className="mt-12 text-lg text-muted-foreground mb-6">
             Thank you for your purchase! Your ebook is ready to download. Click
-            the button below to get your copy.
+            the button below to get your copy. {customerData}
           </p>
 
           {/* Download Button */}
           <a
-            href="/path/to/your/ebook.pdf" // Replace with your ebook's URL
+            href={customerData?.downloadLink || "/path/to/your/ebook.pdf"} // Use download link from customer data
             className="inline-block px-8 py-4 bg-blue-500 text-white text-lg font-medium rounded-md shadow-lg transform transition-all hover:scale-105"
           >
             Download Your Ebook

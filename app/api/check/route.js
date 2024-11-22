@@ -3,7 +3,8 @@
 import { client } from "@/app/lib/sanity";
 
 export async function GET(req) {
-  const { transactionId } = req.query;
+  const url = new URL(req.url); // Get the full URL from the request
+  const transactionId = url.searchParams.get("id"); // Get the `id` parameter from the URL
 
   try {
     // Query Sanity to check if the user has a completed transaction
