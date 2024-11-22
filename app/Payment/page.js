@@ -94,6 +94,14 @@ const Payment = () => {
     let items = event.data.items;
     let totals = event.data.totals; // Paddle totals data
 
+    // Check if payment is successful (you can modify this based on Paddle's event names and response)
+    if (event.name === "payment_success") {
+      const transactionId = event.data.transaction_id; // Extract transaction ID
+
+      // Redirect to the download page with the transaction ID as a query parameter
+      window.location.href = `/download?transaction_id=${transactionId}`;
+    }
+
     if (items.length > 0) {
       const item = items[0]; // Assuming the first item is what you want
       setProduct({
@@ -123,7 +131,6 @@ const Payment = () => {
           frameInitialHeight: "450", // Set initial height for iframe
           frameStyle:
             "width: 100%; min-width: 312px; background-color: transparent; border: none;",
-          successUrl: `${window.location.origin}/download`,
         },
         items: items, // Pass the items list
       });
