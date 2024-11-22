@@ -63,16 +63,17 @@ const Download = () => {
   };
 
   // Display a loading screen if data is still being fetched
-  if (isLoading) {
+  if (isLoading || !customerData || !productData) {
     return <Loading />;
   }
 
+  // If there's an error, show the error message
   if (error) {
     return <div>Error: {error}</div>;
   }
 
-  // Once data is loaded, render the correct content based on payment status
-  if (customerData && customerData.hasPaid && productData) {
+  // Once both customer data and product data are available, render the appropriate content
+  if (customerData.hasPaid && productData) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-blue-100 to-[#f3f3f3]">
         <div className="relative p-6 md:p-12 max-w-lg bg-white rounded-xl shadow-xl overflow-hidden w-full">
