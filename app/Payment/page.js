@@ -99,7 +99,7 @@ const Payment = () => {
       const transactionId = event.data.transaction_id; // Extract transaction ID
 
       // Redirect to the download page with the transaction ID as a query parameter
-      window.location.href = `/download?transaction_id=${transactionId}`;
+      window.location.href = `/download?id=${transactionId}`;
     }
 
     if (items.length > 0) {
