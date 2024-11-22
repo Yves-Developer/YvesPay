@@ -95,7 +95,7 @@ const Payment = () => {
     let totals = event.data.totals; // Paddle totals data
 
     // Check if payment is successful (you can modify this based on Paddle's event names and response)
-    if (event.name === "payment_success") {
+    if (event.name === "checkout.completed") {
       const transactionId = event.data.transaction_id; // Extract transaction ID
 
       // Redirect to the download page with the transaction ID as a query parameter
