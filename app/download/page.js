@@ -35,7 +35,7 @@ const Download = () => {
           </h2>
           <p className="mt-12 text-lg text-muted-foreground mb-6">
             Thank you for your purchase! Your ebook is ready to download. Click
-            the button below to get your copy. {custId}
+            the button below to get your copy.
           </p>
 
           {/* Download Button */}

@@ -45,13 +45,11 @@ async function handleTransactionPaid(data) {
     // Save transaction data to Sanity
     await client.create({
       _type: "transaction",
-      transactionId: transactionData.id,
-      userEmail: transactionData.customer_id, // You can use customer email from here
+      transactionId: transactionData.id, // You can use customer email from here
       amount: Number(balance),
-      currency: transactionData.details.currency_code,
+      currency: transactionData.items[0].currency_code,
       status: transactionData.status, // status = 'paid'
-      productName: transactionData.items[0].price.name,
-      transactionDetails: JSON.stringify(transactionData), // Store raw data if needed
+      productName: transactionData.items[0].price.name, // Store raw data if needed
     });
 
     console.log("Transaction data saved to Sanity.");
