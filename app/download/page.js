@@ -63,6 +63,30 @@ const Download = () => {
     }
   }, [customerData]); // Run this effect when customer data is available
 
+  // Function to manually trigger a refetch of customer data
+  const handlePaymentSuccess = async () => {
+    setLoadingData(true);
+    try {
+      const response = await fetch(`/api/check?id=${custId}`);
+      const data = await response.json();
+      if (data.hasPaid) {
+        setCustomerData(data); // Update the customer data
+        const productData = await getData();
+        const zipFileUrl = productData.zipFile?.asset
+          ? await client.getDocument(productData.zipFile.asset._ref)
+          : null;
+        const link = zipFileUrl ? zipFileUrl.url : null;
+        setProductData({ ...productData, zipFileUrl: link }); // Update the product data
+      } else {
+        setCustomerData({ hasPaid: false });
+      }
+    } catch (error) {
+      setError("Error fetching updated payment status.");
+    } finally {
+      setLoadingData(false);
+    }
+  };
+
   if (loadingData) {
     return <Loading />;
   }
