@@ -106,7 +106,7 @@ const Download = () => {
           </p>
           <a
             href="/Product" // Use download link from customer data
-            className="inline-block px-8 py-4 bg-blue-500 text-white text-lg font-medium rounded-md shadow-lg transform transition-all hover:scale-105"
+            className="inline-block px-4 py-3 bg-blue-500 text-white text-lg font-medium rounded-md shadow-lg transform transition-all hover:scale-105"
           >
             Buy Now
           </a>
