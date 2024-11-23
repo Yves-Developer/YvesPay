@@ -29,7 +29,7 @@ const Footer = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="/Cookie-policy" className="hover:text-primary">
+                  <a href="/cookie-policy" className="hover:text-primary">
                     Cookie Policy
                   </a>
                 </li>
