@@ -14,22 +14,22 @@ const Footer = () => {
               <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
               <ul className="space-y-2">
                 <li>
-                  <a href="/privacy-policy" className=" hover:text-primary">
+                  <a href="/Privacy-policy" className=" hover:text-primary">
                     Privacy Policy
                   </a>
                 </li>
                 <li>
-                  <a href="/terms" className="hover:text-primary">
+                  <a href="/Terms" className="hover:text-primary">
                     Terms of Service
                   </a>
                 </li>
                 <li>
-                  <a href="/refund-policy" className="hover:text-primary">
+                  <a href="/Refund-policy" className="hover:text-primary">
                     Refund Policy
                   </a>
                 </li>
                 <li>
-                  <a href="/cookie-policy" className="hover:text-primary">
+                  <a href="/Cookie-policy" className="hover:text-primary">
                     Cookie Policy
                   </a>
                 </li>

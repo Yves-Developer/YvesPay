@@ -82,7 +82,7 @@ export default function Terms() {
           Due to the nature of digital products, **Sharpbook** does not offer
           refunds or cancellations once a purchase has been completed. For more
           information on our refund policy, please refer to our{" "}
-          <a href="/refund-policy" className="text-blue-500">
+          <a href="/Refund-policy" className="text-blue-500">
             Refund Policy
           </a>
           .
@@ -124,7 +124,7 @@ export default function Terms() {
         </h2>
         <p>
           Your use of the Site is governed by our{" "}
-          <a href="/privacy-policy" className="text-blue-500">
+          <a href="/Privacy-policy" className="text-blue-500">
             Privacy Policy
           </a>
           , which explains how we collect, store, and protect your personal
