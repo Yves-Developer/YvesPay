@@ -19,13 +19,18 @@ const Footer = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="/terms-of-service" className="hover:text-primary">
+                  <a href="/terms" className="hover:text-primary">
                     Terms of Service
                   </a>
                 </li>
                 <li>
-                  <a href="/faq" className="hover:text-primary">
-                    FAQ
+                  <a href="/refund-policy" className="hover:text-primary">
+                    Refund Policy
+                  </a>
+                </li>
+                <li>
+                  <a href="/cookie-policy" className="hover:text-primary">
+                    Cookie Policy
                   </a>
                 </li>
               </ul>
