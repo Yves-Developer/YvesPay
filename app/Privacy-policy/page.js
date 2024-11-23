@@ -74,8 +74,8 @@ export default function PrivacyPolicy() {
           You have the right to access, correct, or delete your personal
           information. If you wish to exercise these rights, please contact us
           at{" "}
-          <a href="mailto:support@sharpbook.store" className="text-blue-500">
-            support@sharpbook.store
+          <a href="mailto:info@sharpbook.store" className="text-blue-500">
+            info@sharpbook.store
           </a>
           .
         </p>
@@ -101,8 +101,8 @@ export default function PrivacyPolicy() {
           <strong>Sharpbook.store</strong>
           <br />
           Email:{" "}
-          <a href="mailto:support@sharpbook.store" className="text-blue-500">
-            support@sharpbook.store
+          <a href="mailto:info@sharpbook.store" className="text-blue-500">
+            info@sharpbook.store
           </a>
           <br />
           Website:{" "}

@@ -24,8 +24,8 @@ export default function RefundPolicy() {
           If you experience any technical issues with the product, such as
           corrupted files or problems with the download link, please contact us
           at{" "}
-          <a href="mailto:support@sharpbook.store" className="text-blue-500">
-            support@sharpbook.store
+          <a href="mailto:info@sharpbook.store" className="text-blue-500">
+            info@sharpbook.store
           </a>
           . We will work with you to resolve any technical issues as quickly as
           possible.
@@ -53,8 +53,8 @@ export default function RefundPolicy() {
           <strong>Sharpbook.store</strong>
           <br />
           Email:{" "}
-          <a href="mailto:support@sharpbook.store" className="text-blue-500">
-            support@sharpbook.store
+          <a href="mailto:info@sharpbook.store" className="text-blue-500">
+            info@sharpbook.store
           </a>
           <br />
           Website:{" "}

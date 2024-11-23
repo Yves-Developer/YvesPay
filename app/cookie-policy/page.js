@@ -46,8 +46,8 @@ export default function CookiesPolicy() {
           <strong>Sharpbook.store</strong>
           <br />
           Email:{" "}
-          <a href="mailto:support@sharpbook.store" className="text-blue-500">
-            support@sharpbook.store
+          <a href="mailto:info@sharpbook.store" className="text-blue-500">
+            info@sharpbook.store
           </a>
           <br />
           Website:{" "}
