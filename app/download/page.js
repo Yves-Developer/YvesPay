@@ -14,41 +14,48 @@ const Download = () => {
   const [isLoading, setIsLoading] = useState(true); // Track loading state for data
   const [error, setError] = useState(null); // Store any error during the fetch process
 
+  // useEffect to load customer data and trigger product data fetching if user has paid
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const custId = searchParams.get("id");
+    const fetchData = async () => {
+      const searchParams = new URLSearchParams(window.location.search);
+      const custId = searchParams.get("id");
 
-    if (custId) {
-      fetchCustomerData(custId); // Fetch customer data on load
-    } else {
-      setError("No customer ID provided.");
-      setIsLoading(false); // If no ID, stop loading and show error
-    }
-  }, []); // Empty array ensures this runs once when the component is mounted
+      if (custId) {
+        try {
+          setIsLoading(true); // Start loading
 
-  const fetchCustomerData = async (custId) => {
-    setIsLoading(true); // Start loading when fetching data
-    try {
-      const response = await fetch(`/api/check?id=${custId}`);
-      const data = await response.json();
+          // Fetch customer data
+          const response = await fetch(`/api/check?id=${custId}`);
+          const data = await response.json();
 
-      if (response.ok && data) {
-        setCustomerData(data);
-        // Fetch product data if user has paid
-        if (data.hasPaid) {
-          fetchProductData();
+          if (response.ok && data) {
+            setCustomerData(data); // Set customer data
+
+            if (data.hasPaid) {
+              // Only fetch product data if user has paid
+              const productData = await fetchProductData();
+              setProductData(productData); // Set product data
+            } else {
+              setError("Payment status not found.");
+            }
+          } else {
+            setError("Error fetching customer data.");
+          }
+        } catch (error) {
+          setError("Error fetching customer data.");
+        } finally {
+          setIsLoading(false); // Stop loading after data is fetched
         }
       } else {
-        setCustomerData({ hasPaid: false });
-        setError("Payment status not found.");
+        setError("No customer ID provided.");
+        setIsLoading(false); // Stop loading if no ID is found
       }
-    } catch (error) {
-      setError("Error fetching customer data.");
-    } finally {
-      setIsLoading(false); // Stop loading after fetching data
-    }
-  };
+    };
 
+    fetchData();
+  }, []); // Empty array ensures this runs only once when the component mounts
+
+  // Fetch product data if the user has paid
   const fetchProductData = async () => {
     try {
       const data = await getData();
@@ -56,23 +63,24 @@ const Download = () => {
         ? await client.getDocument(data.zipFile.asset._ref)
         : null;
       const link = zipFileUrl ? zipFileUrl.url : null;
-      setProductData({ ...data, zipFileUrl: link });
+      return { ...data, zipFileUrl: link }; // Return data with download link
     } catch (error) {
       setError("Error fetching product data.");
+      return null;
     }
   };
 
-  // Display a loading screen if data is still being fetched
+  // Show loading spinner while data is being fetched
   if (isLoading || !customerData || !productData) {
     return <Loading />;
   }
 
-  // If there's an error, show the error message
+  // If there is an error, display it
   if (error) {
     return <div>Error: {error}</div>;
   }
 
-  // Once both customer data and product data are available, render the appropriate content
+  // Render the page once both customer and product data are available
   if (customerData.hasPaid && productData) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-blue-100 to-[#f3f3f3]">
