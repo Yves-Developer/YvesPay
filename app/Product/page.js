@@ -12,6 +12,7 @@ import Link from "next/link";
 import Header from "@/components/ui/Header";
 import { getData } from "../lib/FetchData";
 import { urlFor } from "../lib/sanity";
+import Disclaimer from "@/components/ui/Disclaimer";
 const Product = async () => {
   const product = {
     reviews: 4.6,
