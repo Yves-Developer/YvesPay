@@ -96,6 +96,10 @@ const Product = async () => {
         <Wrapper>
           <Pricing />
         </Wrapper>
+        <Header title="Disclaimer" keytext="." />
+        <Wrapper>
+          <Disclaimer />
+        </Wrapper>
         <Header title="Frequently Asked  " keytext="Questions." />
         <Wrapper>
           <Faq />

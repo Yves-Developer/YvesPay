@@ -9,6 +9,7 @@ import Reviews from "./sections/Reviews";
 import Pricing from "./sections/Pricing";
 import Faq from "./sections/Faq";
 import { getData } from "./lib/FetchData"; // Import the data-fetching function
+import Disclaimer from "@/components/ui/Disclaimer";
 
 // Async function inside the component to fetch data
 const Home = async () => {
@@ -26,6 +27,10 @@ const Home = async () => {
       <Header title="Get Instant Access for Just " keytext={`$${data.price}`} />
       <Wrapper>
         <Pricing />
+      </Wrapper>
+      <Header title="Disclaimer" keytext="." />
+      <Wrapper>
+        <Disclaimer />
       </Wrapper>
       <Header title="Frequently Asked  " keytext="Questions." />
       <Wrapper>
