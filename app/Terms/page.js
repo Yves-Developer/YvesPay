@@ -195,9 +195,10 @@ export default function Terms() {
         <h2 className="text-xl font-semibold mb-2">15. Governing Law</h2>
         <p>
           These Terms are governed by and construed in accordance with the laws
-          of [Your jurisdiction], without regard to its conflict of law
-          principles. Any disputes arising from these Terms shall be resolved in
-          the courts of [Your jurisdiction].
+          of GDPR (General Data Protection Regulation), without regard to its
+          conflict of law principles. Any disputes arising from these Terms
+          shall be resolved in the courts of GDPR (General Data Protection
+          Regulation).
         </p>
       </section>
 
