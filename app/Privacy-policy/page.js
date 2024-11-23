@@ -5,7 +5,7 @@ export default function PrivacyPolicy() {
     <div className="max-w-4xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-center mb-4">Privacy Policy</h1>
       <p className="text-center text-muted-foreground mb-8">
-        <strong>Effective Date: [Insert Date]</strong>
+        <strong>Effective Date: 23 November 2024</strong>
       </p>
 
       <section className="mb-8">

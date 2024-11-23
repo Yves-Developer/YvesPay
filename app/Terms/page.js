@@ -7,7 +7,7 @@ export default function Terms() {
         Terms and Conditions
       </h1>
       <p className="text-center text-muted-foreground mb-8">
-        <strong>Effective Date: [Insert Date]</strong>
+        <strong>Effective Date: 23 November 2024</strong>
       </p>
 
       <section className="mb-8">
