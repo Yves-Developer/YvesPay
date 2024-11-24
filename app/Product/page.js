@@ -109,5 +109,5 @@ const Product = async () => {
     </section>
   );
 };
-export const revaliadate = 10;
+export const revalidate = 10;
 export default Product;
