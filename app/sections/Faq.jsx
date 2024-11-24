@@ -39,7 +39,7 @@ const Faq = () => {
               Can I get a refund if I’m not satisfied?
             </AccordionTrigger>
             <AccordionContent className="p-4 bg-gray-50 border-l-4 rounded-b-lg">
-              Yes, we offer a 30-day money-back guarantee. If you're not satisfied with how the ebook helps improve your mental performance, just contact us for a full refund.
+            Unfortunately, due to the nature of digital products, we do not offer refunds. Please ensure you're fully satisfied before purchasing.
             </AccordionContent>
           </AccordionItem>
 

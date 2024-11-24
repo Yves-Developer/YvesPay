@@ -43,7 +43,7 @@ const Features = () => {
             className="flex flex-col items-center justify-center w-[250px] p-6"
           >
             {/* Icon styling */}
-            <div className="mb-6 p-4 bg-[#f3f3f3] rounded-sm hover:scale-110 transition-all duration-200 ease-in-out">
+            <div className="mb-6 p-4 bg-[#f5f5f5] rounded-sm hover:scale-110 transition-all duration-200 ease-in-out">
               <div className="text-5xl text-primary">{data.icon}</div>
             </div>
             {/* Title */}
