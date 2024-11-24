@@ -20,35 +20,36 @@ const Download = () => {
       const searchParams = new URLSearchParams(window.location.search);
       const custId = searchParams.get("id");
 
-      if (custId) {
-        try {
-          setIsLoading(true); // Start loading
-
-          // Fetch customer data
-          const response = await fetch(`/api/check?id=${custId}`);
-          const data = await response.json();
-
-          if (response.ok && data) {
-            setCustomerData(data); // Set customer data
-
-            if (data.hasPaid) {
-              // Only fetch product data if user has paid
-              const productData = await fetchProductData();
-              setProductData(productData); // Set product data
-            } else {
-              setError("Payment status not found.");
-            }
-          } else {
-            setError("Error fetching customer data.");
-          }
-        } catch (error) {
-          setError("Error fetching customer data.");
-        } finally {
-          setIsLoading(false); // Stop loading after data is fetched
-        }
-      } else {
+      if (!custId) {
         setError("No customer ID provided.");
-        setIsLoading(false); // Stop loading if no ID is found
+        setIsLoading(false);
+        return; // Stop execution here if no customer ID is provided
+      }
+
+      try {
+        setIsLoading(true); // Start loading
+
+        // Fetch customer data
+        const response = await fetch(`/api/check?id=${custId}`);
+        const data = await response.json();
+
+        if (response.ok && data) {
+          setCustomerData(data); // Set customer data
+
+          if (data.hasPaid) {
+            // Only fetch product data if the user has paid
+            const productData = await fetchProductData();
+            setProductData(productData); // Set product data
+          } else {
+            setError("Payment not completed or not found.");
+          }
+        } else {
+          setError("Error fetching customer data. Please check the ID.");
+        }
+      } catch (error) {
+        setError("Error fetching customer data. Please try again.");
+      } finally {
+        setIsLoading(false); // Stop loading after data is fetched
       }
     };
 
@@ -58,7 +59,7 @@ const Download = () => {
   // Fetch product data if the user has paid
   const fetchProductData = async () => {
     try {
-      const data = await getData();
+      const data = await getData({ timestamp: Date.now() }); // Force fresh fetch with timestamp
       const zipFileUrl = data.zipFile?.asset
         ? await client.getDocument(data.zipFile.asset._ref)
         : null;
@@ -71,16 +72,16 @@ const Download = () => {
   };
 
   // Show loading spinner while data is being fetched
-  if (isLoading || !customerData || !productData) {
+  if (isLoading) {
     return <Loading />;
   }
 
   // If there is an error, display it
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div className="text-center text-red-500">{error}</div>;
   }
 
-  // Render the page once both customer and product data are available
+  // Render content once customer data and product data are available
   if (customerData.hasPaid && productData) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-blue-100 to-[#f3f3f3]">
