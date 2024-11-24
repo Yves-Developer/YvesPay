@@ -43,7 +43,7 @@ const Navbar = () => {
                 />
                 {/* Add cart item count here if necessary */}
               </a>
-              <a href="/login" className="text-gray-600 hover:text-primary">
+              <a href="https://sharpbook.sanity.studio" className="text-gray-600 hover:text-primary">
                 <User size={24} />
               </a>
             </div>
