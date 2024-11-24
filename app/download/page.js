@@ -78,7 +78,26 @@ const Download = () => {
 
   // If there is an error, display it
   if (error) {
-    return <div className="text-center text-red-500">{error}</div>;
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-blue-100 to-[#f3f3f3]">
+        <div className="relative p-6 md:p-12 max-w-lg bg-white rounded-xl shadow-xl overflow-hidden w-full">
+          <div className="absolute top-[-50px] right-[-50px] w-44 h-44 rounded-full bg-blue-300 opacity-30"></div>
+          <div className="absolute bottom-[-60px] left-[-60px] w-32 h-32 rounded-lg bg-blue-300 opacity-30"></div>
+          <h2 className="text-lg text-red-500 font-semibold">
+            {error}
+          </h2>
+          <p className="text-lg text-muted-foreground mt-4">
+            Please complete your payment to access the download link.
+          </p>
+          <a
+            href="/Product" // Link to purchase page
+            className="inline-block px-4 py-3 bg-blue-500 text-white text-lg font-medium rounded-md shadow-lg transform transition-all hover:scale-105"
+          >
+            Buy Now
+          </a>
+        </div>
+      </div>
+    );
   }
 
   // Render content once customer data and product data are available
@@ -111,28 +130,7 @@ const Download = () => {
         </div>
       </div>
     );
-  } else {
-    return (
-      <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-blue-100 to-[#f3f3f3]">
-        <div className="relative p-6 md:p-12 max-w-lg bg-white rounded-xl shadow-xl overflow-hidden w-full">
-          <div className="absolute top-[-50px] right-[-50px] w-44 h-44 rounded-full bg-blue-300 opacity-30"></div>
-          <div className="absolute bottom-[-60px] left-[-60px] w-32 h-32 rounded-lg bg-blue-300 opacity-30"></div>
-          <h2 className="text-lg text-red-500 font-semibold">
-            Unfortunately, You have not paid yet.
-          </h2>
-          <p className="text-lg text-muted-foreground mt-4">
-            Please complete your payment to access the download link.
-          </p>
-          <a
-            href="/Product" // Link to purchase page
-            className="inline-block px-4 py-3 bg-blue-500 text-white text-lg font-medium rounded-md shadow-lg transform transition-all hover:scale-105"
-          >
-            Buy Now
-          </a>
-        </div>
-      </div>
-    );
-  }
+  } 
 };
 
 export default Download;
