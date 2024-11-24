@@ -10,18 +10,19 @@ import Link from "next/link";
 
 const ebookFeatures = [
   {
-    title: "Unlock Proven Strategies to Maximize Your Trading Profits",
+    title: "Proven Techniques to Boost Your Brainpower",
   },
   {
-    title: "Expert Strategies for Identifying Profitable Trades",
+    title: "Expert Tips for Enhancing Focus, Memory, and Clarity",
   },
   {
-    title: "Learn to Read the Markets Like a Pro",
+    title: "Learn to Think Faster and Make Smarter Decisions",
   },
   {
-    title: "Perfect for Both Beginners and Experienced Traders",
+    title: "Perfect for Anyone Looking to Improve Their Mental Edge",
   },
 ];
+
 
 const Hero = async () => {
   const data = await getData(); // Fetch data using the getData function
@@ -45,7 +46,7 @@ const Hero = async () => {
           {/* Dynamic content */}
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground">
-          Unlock the Secrets to Smart, Profitable Trading with Our Expert Guide
+        Unlock the Secrets to Sharpening Your Mind for Success with Our Expert eBook
         </p>
 
         <ol className="space-y-4 ml-5">
@@ -63,7 +64,7 @@ const Hero = async () => {
         </ol>
 
         <Button className="mt-6 px-8 py-7 text-lg" asChild>
-          <Link href="/Product">Get Instant Access & Trade Smarter</Link>
+          <Link href="/Product">Get Instant Access & Boost Your Brainpower</Link>
         </Button>
 
         <div className="flex">
