@@ -80,10 +80,10 @@ const Hero = async () => {
       <div className="w-full custom:w-1/2 flex justify-center items-center relative">
         <div className="absolute z-10 bg-white p-6 rounded-lg shadow-xl transform translate-y-16 mx-auto left-0 right-0 md:mx-0 md:left-auto md:right-auto md:-translate-x-2/3 md:translate-y-[200px]">
           <h2 className="text-xl font-semibold">
-          Start Sharpening Your Mind Today!
+          Sharpen Your Mind Today!
           </h2>
           <p className="mt-2 text-muted-foreground">
-          Get the techniques you need to boost your brainpower.
+          Boost your brainpower with proven techniques.
           </p>
         </div>
 
