@@ -36,7 +36,7 @@ const Navbar = () => {
 
             {/* Cart & User (Desktop) */}
             <div className="hidden md:flex items-center space-x-6">
-              <a href="/cart" className="relative">
+              <a href="#" className="relative">
                 <ShoppingCart
                   size={24}
                   className="text-gray-600 hover:text-primary"
