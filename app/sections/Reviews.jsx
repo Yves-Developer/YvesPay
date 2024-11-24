@@ -18,13 +18,12 @@ const Reviews = () => {
           <Card className="text-center p-6 bg-white shadow-lg rounded-lg">
             <CardHeader>
               <CardTitle className="text-lg font-semibold">
-                "This ebook helped me understand chart patterns like never
-                before!"
+                "This ebook transformed how I think and make decisions!"
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                – John D., Beginner Trader
+                – John D., Aspiring Learner
               </p>
             </CardContent>
           </Card>
@@ -33,12 +32,12 @@ const Reviews = () => {
           <Card className="text-center p-6 bg-white shadow-lg rounded-lg">
             <CardHeader>
               <CardTitle className="text-lg font-semibold">
-                "The strategies are easy to follow and work right away!"
+                "The techniques are simple and effective right from the start."
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                – Sarah T., Experienced Investor
+                – Sarah T., Professional
               </p>
             </CardContent>
           </Card>
@@ -47,12 +46,12 @@ const Reviews = () => {
           <Card className="text-center p-6 bg-white shadow-lg rounded-lg">
             <CardHeader>
               <CardTitle className="text-lg font-semibold">
-                "Incredible value for the price. Highly recommend!"
+                "I saw a noticeable improvement in my mental clarity and focus!"
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                – Mike S., Professional Trader
+                – Mike S., Busy Executive
               </p>
             </CardContent>
           </Card>

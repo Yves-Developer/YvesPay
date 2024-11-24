@@ -3,7 +3,7 @@
 import React from "react";
 import {
   Download,
-  ChartNoAxesCombined,
+  Brain,
   Truck,
   BookOpenCheck,
 } from "lucide-react"; // import Lucide icons
@@ -12,12 +12,12 @@ const features = [
   {
     title: "Instant Access",
     icon: <Download />,
-    description: "Start learning right away with immediate digital delivery.",
+    description: "Start sharpening your mind right away with immediate digital delivery.",
   },
   {
     title: "Proven Techniques",
-    icon: <ChartNoAxesCombined />,
-    description: "Master chart patterns with strategies that work.",
+    icon: <Brain />,
+    description: "Master brain-boosting strategies that deliver real results.",
   },
   {
     title: "No Shipping Fees",
@@ -27,9 +27,10 @@ const features = [
   {
     title: "Easy to Follow",
     icon: <BookOpenCheck />,
-    description: "Actionable, beginner-friendly steps to enhance your trading.",
+    description: "Simple, actionable steps to improve focus, memory, and mental clarity.",
   },
 ];
+
 
 const Features = () => {
   return (

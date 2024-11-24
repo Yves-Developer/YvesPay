@@ -29,12 +29,6 @@ const Navbar = () => {
               <a href="/Product" className="text-gray-600 hover:text-primary">
                 Product
               </a>
-              <a href="/pricing" className="text-gray-600 hover:text-primary">
-                Pricing
-              </a>
-              <a href="/about" className="text-gray-600 hover:text-primary">
-                About
-              </a>
               <a href="/contact" className="text-gray-600 hover:text-primary">
                 Contact
               </a>
@@ -93,31 +87,19 @@ const Navbar = () => {
                 Product
               </a>
               <a
-                href="/pricing"
-                className="block text-gray-600 hover:text-primary"
-              >
-                Pricing
-              </a>
-              <a
-                href="/about"
-                className="block text-gray-600 hover:text-primary"
-              >
-                About
-              </a>
-              <a
                 href="/contact"
                 className="block text-gray-600 hover:text-primary"
               >
                 Contact
               </a>
               <a
-                href="/cart"
+                href="#"
                 className="block text-gray-600 hover:text-primary"
               >
                 <ShoppingCart size={24} />
               </a>
               <a
-                href="/login"
+                href="https://sharpbook.sanity.studio"
                 className="block text-gray-600 hover:text-primary"
               >
                 <User size={24} />

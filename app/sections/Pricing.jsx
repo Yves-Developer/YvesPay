@@ -13,21 +13,22 @@ import Link from "next/link";
 const ebookFeatures = [
   {
     icon: "✨",
-    title: "Unlock Proven Strategies to Maximize Your Trading Profits",
+    title: "Unlock Proven Techniques to Boost Your Brainpower",
   },
   {
-    icon: "📚",
-    title: "Expert Strategies for Identifying Profitable Trades",
+    icon: "🧠",
+    title: "Expert Strategies to Enhance Focus, Memory, and Clarity",
   },
   {
     icon: "🌟",
-    title: "Learn to Read the Markets Like a Pro",
+    title: "Learn to Think Faster and Make Smarter Decisions",
   },
   {
     icon: "💡",
-    title: "Perfect for Both Beginners and Experienced Traders",
+    title: "Perfect for Anyone Looking to Improve Their Mental Edge",
   },
 ];
+
 
 const Pricing = () => {
   return (
@@ -68,7 +69,7 @@ const Pricing = () => {
           <CardFooter>
             {/* Call to Action Button */}
             <button className="px-8 py-4 bg-primary text-white rounded-md text-lg mt-4 w-full">
-              <Link href="/Product">Buy Now and Start Trading Smarter</Link>
+              <Link href="/Product">Buy Now and Boost Your Brainpower</Link>
             </button>
           </CardFooter>
         </Card>

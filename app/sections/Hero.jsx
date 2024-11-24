@@ -72,7 +72,7 @@ const Hero = async () => {
           <Star className="text-yellow-400 text-sm" />
           <Star className="text-yellow-400 text-sm" />
           <p className="ml-2">
-            Excellent <b>4.6</b> | 800+ Trusted Users
+            Excellent <b>4.6</b> | 800+ Trusted Reviews
           </p>
         </div>
       </div>

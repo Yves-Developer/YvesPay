@@ -105,8 +105,8 @@ const Footer = () => {
           {/* Copyright Section */}
           <Card className="border-none">
             <CardFooter className="text-center">
-              <p className="text-sm">
-                &copy; {new Date().getFullYear()} Your Company Name. All Rights
+              <p className="text-sm text-muted-foreground">
+                &copy; {new Date().getFullYear()} Sharp<span className="text-primary">book</span>. All Rights
                 Reserved.
               </p>
             </CardFooter>
