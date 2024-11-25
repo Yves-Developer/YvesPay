@@ -5,9 +5,9 @@ import "./globals.css";
 import Footer from "./sections/Footer";
 import Navbar from "./sections/Navbar";
 export const metadata = {
-  title: "2024 Trading Chart Patterns Ebook",
+  title: "Sharpening Your Brain Ebook",
   description:
-    "Unlock the Secrets to Smart, Profitable Trading with Our Expert Guide",
+    "Unlock the Secrets to Sharpening Your Mind for Success with Our Expert eBook",
 };
 
 export default function RootLayout({ children }) {
