@@ -1,4 +1,5 @@
-/** @format */ // For the checkmark icon
+/** @format */ 
+// For the checkmark icon
 import {
   Card,
   CardHeader,
@@ -12,23 +13,22 @@ import Link from "next/link";
 
 const ebookFeatures = [
   {
-    icon: "✨",
-    title: "Unlock Proven Techniques to Boost Your Brainpower",
+    icon: "🚀",
+    title: "Master Next.js Features for Fast, Modern Web Apps",
   },
   {
-    icon: "🧠",
-    title: "Expert Strategies to Enhance Focus, Memory, and Clarity",
+    icon: "⚡",
+    title: "Step-by-Step Tutorials for Real-World Projects",
   },
   {
-    icon: "🌟",
-    title: "Learn to Think Faster and Make Smarter Decisions",
+    icon: "⚙️",
+    title: "Performance Optimization Techniques for Speed",
   },
   {
-    icon: "💡",
-    title: "Perfect for Anyone Looking to Improve Their Mental Edge",
+    icon: "🌍",
+    title: "Deployment Strategies for Scalability and Flexibility",
   },
 ];
-
 
 const Pricing = () => {
   return (
@@ -47,7 +47,7 @@ const Pricing = () => {
               What's Included:
             </CardTitle>
             <CardDescription className="text-sm text-muted-foreground mb-4">
-              A comprehensive guide to trading with expert insights.
+              A comprehensive guide to mastering Next.js with expert tips and techniques.
             </CardDescription>
           </CardHeader>
 
@@ -69,7 +69,7 @@ const Pricing = () => {
           <CardFooter>
             {/* Call to Action Button */}
             <button className="px-8 py-4 bg-primary text-white rounded-md text-lg mt-4 w-full">
-              <Link href="/Product">Buy Now and Boost Your Brainpower</Link>
+              <Link href="/Product">Buy Now and Master Next.js</Link>
             </button>
           </CardFooter>
         </Card>

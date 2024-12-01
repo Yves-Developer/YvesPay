@@ -18,12 +18,12 @@ const Reviews = () => {
           <Card className="text-center p-6 bg-white shadow-lg rounded-lg">
             <CardHeader>
               <CardTitle className="text-lg font-semibold">
-                "This ebook transformed how I think and make decisions!"
+                "This ebook gave me the tools to build modern, fast web apps!"
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                – John D., Aspiring Learner
+                – Alex P., Front-End Developer
               </p>
             </CardContent>
           </Card>
@@ -32,12 +32,12 @@ const Reviews = () => {
           <Card className="text-center p-6 bg-white shadow-lg rounded-lg">
             <CardHeader>
               <CardTitle className="text-lg font-semibold">
-                "The techniques are simple and effective right from the start."
+                "The tutorials were so easy to follow, and I built my first Next.js app in no time."
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                – Sarah T., Professional
+                – Rachel W., Aspiring Web Developer
               </p>
             </CardContent>
           </Card>
@@ -46,12 +46,12 @@ const Reviews = () => {
           <Card className="text-center p-6 bg-white shadow-lg rounded-lg">
             <CardHeader>
               <CardTitle className="text-lg font-semibold">
-                "I saw a noticeable improvement in my mental clarity and focus!"
+                "A game-changer for anyone serious about mastering Next.js!"
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                – Mike S., Busy Executive
+                – Daniel M., Experienced Developer
               </p>
             </CardContent>
           </Card>

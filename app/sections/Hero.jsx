@@ -10,18 +10,19 @@ import Link from "next/link";
 
 const ebookFeatures = [
   {
-    title: "Proven Techniques to Boost Your Brainpower",
+    title: "Comprehensive Guide to Next.js Features",
   },
   {
-    title: "Expert Tips for Enhancing Focus, Memory, and Clarity",
+    title: "Step-by-Step Tutorials for Real-World Projects",
   },
   {
-    title: "Learn to Think Faster and Make Smarter Decisions",
+    title: "Performance Optimization Techniques",
   },
   {
-    title: "Perfect for Anyone Looking to Improve Their Mental Edge",
+    title: "Deployment Strategies and Tools",
   },
 ];
+
 
 
 const Hero = async () => {
@@ -46,7 +47,7 @@ const Hero = async () => {
           {/* Dynamic content */}
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground">
-        Unlock the Secrets to Sharpening Your Mind for Success with Our Expert eBook
+        Master the Skills to Build Fast, Modern Web Apps with Our Expert Next.js Guide
         </p>
 
         <ol className="space-y-4 ml-5">
@@ -64,7 +65,7 @@ const Hero = async () => {
         </ol>
 
         <Button className="mt-6 px-8 py-7 text-lg" asChild>
-          <Link href="/Product">Get Instant Access & Boost Your Brainpower</Link>
+          <Link href="/Product">Get Instant Access & Build Modern Web Apps</Link>
         </Button>
 
         <div className="flex">
@@ -80,10 +81,10 @@ const Hero = async () => {
       <div className="w-full custom:w-1/2 flex justify-center items-center relative">
         <div className="absolute z-10 bg-white p-6 rounded-lg shadow-xl transform translate-y-16 mx-auto left-0 right-0 md:mx-0 md:left-auto md:right-auto md:-translate-x-2/3 md:translate-y-[200px]">
           <h2 className="text-xl font-semibold">
-          Sharpen Your Mind Today!
+          Build Smarter Apps Today!
           </h2>
           <p className="mt-2 text-muted-foreground">
-          Boost your brainpower with proven techniques.
+          Build Modern Web Apps with Proven Techniques.
           </p>
         </div>
 

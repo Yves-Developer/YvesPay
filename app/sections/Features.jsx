@@ -3,8 +3,8 @@
 import React from "react";
 import {
   Download,
-  Brain,
-  Truck,
+  Code,
+  Laptop,
   BookOpenCheck,
 } from "lucide-react"; // import Lucide icons
 
@@ -12,24 +12,25 @@ const features = [
   {
     title: "Instant Access",
     icon: <Download />,
-    description: "Start sharpening your mind right away with immediate digital delivery.",
+    description: "Get immediate access to the ebook and start mastering Next.js right away.",
   },
   {
     title: "Proven Techniques",
-    icon: <Brain />,
-    description: "Master brain-boosting strategies that deliver real results.",
+    icon: <Code />,
+    description: "Learn powerful Next.js techniques to build fast, modern web apps.",
   },
   {
     title: "No Shipping Fees",
-    icon: <Truck />,
-    description: "Get your ebook instantly with no extra costs.",
+    icon: <Laptop />,
+    description: "Enjoy digital delivery with no extra shipping costs, accessible on any device.",
   },
   {
     title: "Easy to Follow",
     icon: <BookOpenCheck />,
-    description: "Simple, actionable steps to improve focus, memory, and mental clarity.",
+    description: "Clear, actionable steps that make mastering Next.js simple, even for beginners.",
   },
 ];
+
 
 
 const Features = () => {
