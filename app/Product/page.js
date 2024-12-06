@@ -28,6 +28,7 @@ const Product = () => {
   useEffect(() => {
     const fetchProductData = async () => {
       try {
+        //getting data from my api for payment[Lemon squeezy]
         const response = await fetch("/api/lemonsqueezy");
 
         if (!response.ok) {
