@@ -66,9 +66,11 @@ const Product = async () => {
 
             {/* Product Details */}
             <div className="lg:w-1/2 space-y-6">
-              <h1 className="text-4xl font-bold text-primary">{data.name}</h1>
+              <h1 className="text-4xl font-bold text-primary">
+                {lemonData.name}
+              </h1>
               <p className="text-lg text-muted-foreground">
-                {JSON.stringify(lemonData)}
+                {lemonData.description}
               </p>
 
               {/* Rating */}
