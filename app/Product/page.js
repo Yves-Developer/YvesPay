@@ -36,7 +36,7 @@ const Product = async () => {
       }
     );
     lemonData = response.data.data[0]; // Assuming you want the first product
-    console.log(lemonData, "\n");
+    console.log(lemonData, "\n codes");
     console.log("All Data", response);
   } catch (error) {
     console.error("Error fetching Lemon Squeezy data:", error);
