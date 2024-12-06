@@ -36,7 +36,7 @@ const Product = async () => {
       }
     );
     lemonData = response.data.data[0];
-    console.log("lemon Data:", response.data); // Assuming you want the first product
+    console.log("lemon Data:", lemonData); // Assuming you want the first product
   } catch (error) {
     console.error("Error fetching Lemon Squeezy data:", error);
   }
