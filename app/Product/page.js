@@ -1,4 +1,5 @@
 /** @format */
+/** @format */
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,27 +14,43 @@ import Header from "@/components/ui/Header";
 import { getData } from "../lib/FetchData";
 import { urlFor } from "../lib/sanity";
 import Disclaimer from "@/components/ui/Disclaimer";
+import axios from "axios"; // Import Axios
 
 const Product = async () => {
-  const api_key =
+  const apiKey =
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiJlZDBjYTAxZWM0NTBiMDM0OTE3MmJiMTBiMjI1OWJhMzE2ZWJiODNmYmI1MDRjMmY1YjIxN2FhYjdlNTIyZThjODdmOTM0OGVlMmJkYTk3MSIsImlhdCI6MTczMzQ4ODQ0My4yMjI0NzQsIm5iZiI6MTczMzQ4ODQ0My4yMjI0NzcsImV4cCI6MjA0OTAyMTI0My4xNzQyNjQsInN1YiI6IjM4NTIzMzciLCJzY29wZXMiOltdfQ.fV45xhawpM7-DQwqrsHdIBN9SJAZJI_AWvapMxdePdUfuOS7YyAQ6w-LXAGpXpCfdDxQK2Mk3MJNt6bsT4tqmzlFgEcV9PCz5JvYvzLF6unYsv7Z1GqQa7tdwfX_YDHqP8xTdD3TfLPdCoxwe2sFi8vyBkhgpm-cTWmbKxoijFP2saRoEn8VIlnTcEjZ3aJzigJVaJea161AUkHV9aRUyXW7bq4OTGxx0XONb1vnzLEMHuemIn3ONxI86VlBk2-vI6iuRPtJ4hxtwkjr1cZlLCRebczkCAgnsdhDHCtOHfyNPa-1WEnjpYTGWNS3N4kVsA8X7Fkt2l2S3jqQUs-xXRzXEzUpaAL35jbRqL3ea4Lz8p_yaS5vUx9MTMqZDPyAIjK0lzrOSr-3sW0DkoW4wBD6u04IUj4zNjdz7jyZ0vQTC6TGjwHbRNL1N-Z3HIj5R-9PB6KnJtrm8507gh29-3u1TzUnxJrQWjmyEEBOdmdpu227y560SGnNzVP3m7Ld";
-  const Header = {
+
+  const headers = {
     Accept: "application/vnd.api+json",
     "Content-Type": "application/vnd.api+json",
-    Authorization: `Bearer {api_key}`,
+    Authorization: `Bearer ${apiKey}`,
   };
-  //Lemon squeezy
-  const response = await axios.get("https://api.lemonsqueezy.com/v1/products", {
-    Header,
-  });
-  console.log(response);
+
+  let lemonData = null;
+  try {
+    // Fetch product data from Lemon Squeezy
+    const response = await axios.get(
+      "https://api.lemonsqueezy.com/v1/products",
+      {
+        headers,
+      }
+    );
+    lemonData = response.data.data[0]; // Assuming you want the first product
+    console.log(lemonData, "\n");
+    console.log("All Data", response);
+  } catch (error) {
+    console.error("Error fetching Lemon Squeezy data:", error);
+  }
+
   const product = {
     reviews: 4.6,
     reviewCount: 800,
-    isBestSeller: true, // Best seller badge if needed
-    isOnSale: true, // Sale flag
+    isBestSeller: true,
+    isOnSale: true,
   };
+
   const data = await getData();
+
   return (
     <section className="py-12">
       <div>
@@ -118,5 +135,6 @@ const Product = async () => {
     </section>
   );
 };
+
 export const revalidate = 10;
 export default Product;
