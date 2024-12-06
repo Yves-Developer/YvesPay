@@ -16,9 +16,6 @@ export async function GET(req) {
       { headers }
     );
 
-    // Log response data for debugging
-    console.log("Lemon Squeezy API Response:", response.status, response.data);
-
     if (
       !response.data ||
       !response.data.data ||

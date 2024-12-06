@@ -13,6 +13,7 @@ import Link from "next/link";
 import Header from "@/components/ui/Header";
 import { getData } from "../lib/FetchData";
 import Disclaimer from "@/components/ui/Disclaimer";
+import Loading from "@/components/ui/Loading";
 
 const Product = () => {
   const [lemonData, setLemonData] = useState(null);
@@ -58,7 +59,7 @@ const Product = () => {
   }
 
   if (!lemonData) {
-    return <div>Loading...</div>; // Show loading state
+    return <Loading />; // Show loading state
   }
 
   return (
