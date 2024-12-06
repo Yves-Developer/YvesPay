@@ -17,13 +17,27 @@ import Disclaimer from "@/components/ui/Disclaimer";
 
 const Product = async () => {
   let lemonData;
+
   try {
     const response = await fetch("https://sharpbook.store/api/lemonsqueezy");
+
+    // Check if the response status is ok (status code 200-299)
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    // Attempt to parse the response as JSON
     lemonData = await response.json();
+
+    // Check if the data is in the expected format
+    if (!lemonData || !lemonData.attributes) {
+      throw new Error("Invalid data format received");
+    }
   } catch (error) {
     console.error("Failed to fetch Lemon Squeezy data:", error);
-    lemonData = null; // Provide fallback
+    lemonData = null; // Provide fallback data if the API request fails
   }
+
   const product = {
     reviews: 4.6,
     reviewCount: 800,
