@@ -58,7 +58,7 @@ const Product = async () => {
             {/* Product Image */}
             <div className="lg:w-1/2">
               <img
-                src={urlFor(data.image[0]).url()}
+                src={lemonData.attributes.large_thumb_url}
                 alt={data.name}
                 className="rounded-lg shadow-lg max-w-full h-auto"
               />
@@ -69,9 +69,12 @@ const Product = async () => {
               <h1 className="text-4xl font-bold text-primary">
                 {lemonData.attributes.name}
               </h1>
-              <p className="text-lg text-muted-foreground">
-                {lemonData.attributes.description}
-              </p>
+              <p
+                className="text-lg text-muted-foreground"
+                dangerouslySetInnerHTML={{
+                  __html: lemonData.attributes.description,
+                }}
+              ></p>
 
               {/* Rating */}
               <div className="flex items-center space-x-2 mt-4">
@@ -96,7 +99,7 @@ const Product = async () => {
                   <>
                     <span className="line-through text-gray-500">$20.00</span>
                     <span className="ml-2 text-red-600">
-                      ${lemonData.attributes.price_formatted}
+                      {lemonData.attributes.price_formatted}
                     </span>
                   </>
                 ) : (
