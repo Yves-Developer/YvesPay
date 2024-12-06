@@ -19,7 +19,7 @@ const Product = async () => {
   let lemonData;
 
   try {
-    const response = await fetch("https://sharpbook.store/api/lemonsqueezy");
+    const response = await fetch("/api/lemonsqueezy");
 
     // Check if the response status is ok (status code 200-299)
     if (!response.ok) {
