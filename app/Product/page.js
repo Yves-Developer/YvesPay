@@ -1,8 +1,8 @@
 /** @format */
 "use client";
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { ShoppingCart } from "lucide-react"; // Icons for cart
 import Wrapper from "@/components/ui/Wrapper";
 import Features from "../sections/Features";
@@ -12,40 +12,54 @@ import Reviews from "../sections/Reviews";
 import Link from "next/link";
 import Header from "@/components/ui/Header";
 import { getData } from "../lib/FetchData";
-import { urlFor } from "../lib/sanity";
 import Disclaimer from "@/components/ui/Disclaimer";
 
-const Product = async () => {
-  let lemonData;
-
-  try {
-    const response = await fetch("/api/lemonsqueezy");
-
-    // Check if the response status is ok (status code 200-299)
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    // Attempt to parse the response as JSON
-    lemonData = await response.json();
-
-    // Check if the data is in the expected format
-    if (!lemonData || !lemonData.attributes) {
-      throw new Error("Invalid data format received");
-    }
-  } catch (error) {
-    console.error("Failed to fetch Lemon Squeezy data:", error);
-    lemonData = null; // Provide fallback data if the API request fails
-  }
-
-  const product = {
+const Product = () => {
+  const [lemonData, setLemonData] = useState(null);
+  const [error, setError] = useState(null);
+  const [product, setProduct] = useState({
     reviews: 4.6,
     reviewCount: 800,
     isBestSeller: true,
     isOnSale: true,
-  };
+  });
 
-  const data = await getData();
+  useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        const response = await fetch("/api/lemonsqueezy");
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!data || !data.attributes) {
+          throw new Error("Invalid data format received");
+        }
+
+        setLemonData(data);
+      } catch (error) {
+        console.error("Failed to fetch Lemon Squeezy data:", error);
+        setError("Failed to load product data. Please try again later.");
+      }
+    };
+
+    fetchProductData();
+  }, []);
+
+  if (error) {
+    return (
+      <div className="text-center text-red-500">
+        <p>{error}</p>
+      </div>
+    );
+  }
+
+  if (!lemonData) {
+    return <div>Loading...</div>; // Show loading state
+  }
 
   return (
     <section className="py-12">
@@ -57,7 +71,7 @@ const Product = async () => {
             <div className="lg:w-1/2">
               <img
                 src={lemonData.attributes.large_thumb_url}
-                alt={data.name}
+                alt={lemonData.attributes.name}
                 className="rounded-lg shadow-lg max-w-full h-auto"
               />
             </div>
@@ -101,7 +115,7 @@ const Product = async () => {
                     </span>
                   </>
                 ) : (
-                  data.price
+                  lemonData.attributes.price_formatted
                 )}
               </div>
 

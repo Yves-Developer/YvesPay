@@ -30,7 +30,7 @@ export async function GET(req) {
       });
     }
 
-    // Extract the first product as a sample
+    // Extract the first product as a sample (or modify according to your needs)
     const product = response.data.data[0];
 
     // Return product data in the response
