@@ -35,8 +35,7 @@ const Product = async () => {
         headers,
       }
     );
-    lemonData = response.data.data[0];
-    console.log("lemon Data:", lemonData); // Assuming you want the first product
+    lemonData = response.data.data[0]; // Assuming you want the first product
   } catch (error) {
     console.error("Error fetching Lemon Squeezy data:", error);
   }
@@ -68,10 +67,10 @@ const Product = async () => {
             {/* Product Details */}
             <div className="lg:w-1/2 space-y-6">
               <h1 className="text-4xl font-bold text-primary">
-                {lemonData.name}
+                {lemonData.attributes.name}
               </h1>
               <p className="text-lg text-muted-foreground">
-                {lemonData.description}
+                {lemonData.attributes.description}
               </p>
 
               {/* Rating */}
@@ -96,7 +95,9 @@ const Product = async () => {
                 {product.isOnSale ? (
                   <>
                     <span className="line-through text-gray-500">$20.00</span>
-                    <span className="ml-2 text-red-600">${data.price}</span>
+                    <span className="ml-2 text-red-600">
+                      ${lemonData.attributes.price_formatted}
+                    </span>
                   </>
                 ) : (
                   data.price
@@ -108,7 +109,7 @@ const Product = async () => {
                 className="bg-primary text-white w-full md:w-auto flex items-center justify-center gap-2 mt-6"
                 asChild
               >
-                <Link href="/Payment">
+                <Link href={lemonData.attributes.buy_now_url}>
                   Buy Now <ShoppingCart size={18} />
                 </Link>
               </Button>
