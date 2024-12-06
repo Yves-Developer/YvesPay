@@ -1,6 +1,5 @@
 /** @format */
 
-import { NextResponse } from "next/server";
 import axios from "axios";
 
 export async function GET(req) {
@@ -17,19 +16,28 @@ export async function GET(req) {
       { headers }
     );
 
+    // Log response data for debugging
+    console.log("Lemon Squeezy API Response:", response.status, response.data);
+
     if (
       !response.data ||
       !response.data.data ||
       response.data.data.length === 0
     ) {
-      return NextResponse.json({ error: "No products found" }, { status: 404 });
+      return new Response(JSON.stringify({ error: "No products found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     // Extract the first product as a sample
     const product = response.data.data[0];
 
     // Return product data in the response
-    return NextResponse.json(product, { status: 200 });
+    return new Response(JSON.stringify(product), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (error) {
     console.error(
       "Error fetching Lemon Squeezy data:",
@@ -37,9 +45,11 @@ export async function GET(req) {
       error.response?.data || error
     );
 
-    return NextResponse.json(
-      { error: "Failed to fetch product data. Please try again later." },
-      { status: 500 }
+    return new Response(
+      JSON.stringify({
+        error: "Failed to fetch product data. Please try again later.",
+      }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 }
