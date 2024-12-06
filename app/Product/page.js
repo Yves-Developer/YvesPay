@@ -36,8 +36,6 @@ const Product = async () => {
       }
     );
     lemonData = response.data.data[0]; // Assuming you want the first product
-    console.log(lemonData, "\n codes");
-    console.log("All Data", response);
   } catch (error) {
     console.error("Error fetching Lemon Squeezy data:", error);
   }
@@ -70,7 +68,7 @@ const Product = async () => {
             <div className="lg:w-1/2 space-y-6">
               <h1 className="text-4xl font-bold text-primary">{data.name}</h1>
               <p className="text-lg text-muted-foreground">
-                {data.description}
+                {JSON.stringify(lemonData)}
               </p>
 
               {/* Rating */}
