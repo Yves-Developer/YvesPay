@@ -127,7 +127,7 @@ const Product = async () => {
         <Reviews />
         <Header
           title="Get Instant Access for Just "
-          keytext={`$${data.price}`}
+          keytext={`${lemonData.attributes.price_formatted}`}
         />
         <Wrapper>
           <Pricing />
