@@ -18,7 +18,7 @@ import Disclaimer from "@/components/ui/Disclaimer";
 const Product = async () => {
   let lemonData;
   try {
-    const response = await fetch("/api/lemonsqueezy");
+    const response = await fetch("https://sharpbook.store/api/lemonsqueezy");
     lemonData = await response.json();
   } catch (error) {
     console.error("Failed to fetch Lemon Squeezy data:", error);
