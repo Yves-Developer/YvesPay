@@ -95,8 +95,8 @@ const Hero = async () => {
         {/* Image with hover effect */}
         <Image
           src={imageUrl} // Use dynamically generated image URL
-          width={1500}
-          height={1383}
+          width={311}
+          height={466}
           alt="Nextjs & Tailwind CSS Pro Guide"
           className="transform transition duration-500 ease-in-out hover:scale-105 shadow-xl rounded-2xl"
         />
