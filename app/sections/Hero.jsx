@@ -10,16 +10,16 @@ import Link from "next/link";
 
 const ebookFeatures = [
   {
-    title: "Comprehensive Guide to Next.js Features",
+    title: "Comprehensive Guide to Next.js 15 Features",
   },
   {
-    title: "Step-by-Step Tutorials for Real-World Projects",
+    title: "Step-by-Step Tutorials for Real-World Applications",
   },
   {
-    title: "Performance Optimization Techniques",
+    title: "Styling and Performance Optimization Techniques",
   },
   {
-    title: "Deployment Strategies and Tools",
+    title: "Deployment Strategies and Maintenance Tools",
   },
 ];
 
@@ -47,7 +47,7 @@ const Hero = async () => {
           {/* Dynamic content */}
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground">
-        Master the Skills to Build Fast, Modern Web Apps with Our Expert Next.js Guide
+        Master Next.js 15 & Tailwind CSS to Build Scalable, Modern Web Applications
         </p>
 
         <ol className="space-y-4 ml-5">
@@ -95,9 +95,9 @@ const Hero = async () => {
         {/* Image with hover effect */}
         <Image
           src={imageUrl} // Use dynamically generated image URL
-          width={414}
-          height={736}
-          alt="Trading Ebook"
+          width={1500}
+          height={1383}
+          alt="Nextjs & Tailwind CSS Pro Guide"
           className="transform transition duration-500 ease-in-out hover:scale-105 shadow-xl rounded-2xl"
         />
       </div>
