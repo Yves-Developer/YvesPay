@@ -72,7 +72,7 @@ const Product = () => {
           <div className="max-w-4xl mx-auto px-4 flex flex-col lg:flex-row items-center space-y-8 lg:space-y-0 lg:space-x-12 mb-10">
             {/* Product Image */}
             <div className="lg:w-1/2">
-              <Image width={311} height={466} src={lemonData.attributes.large_thumb_url} alt={lemonData.attributes.name} className="rounded-lg shadow-lg max-w-full h-auto" />
+              <img width={311} height={466} src={lemonData.attributes.large_thumb_url} alt={lemonData.attributes.name} className="rounded-lg shadow-lg max-w-full h-auto" />
             </div>
 
             {/* Product Details */}
